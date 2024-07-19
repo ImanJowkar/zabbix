@@ -21,7 +21,7 @@ SELINUX=disabled
 then reboot your system
 
 
-# finally run below command to ensure the selinux disables
+# finally run below command to ensure the selinux disabled
 
 sestatus
 ```
