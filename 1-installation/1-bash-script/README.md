@@ -1,4 +1,4 @@
-## Zabbix installation
+## Zabbix-server installation
 
 
 ```
@@ -54,4 +54,31 @@ sudo systemctl enable zabbix-server zabbix-agent apache2
 
 
 
+
+
+# firewall configurations
+
+sudo ufw allow 10051/tcp
+# sudo ufw allow 10050/tcp
+sudo ufw allow 80/tcp
+
+
+
+
+
+# you can reset ufw with below command
+sudo ufw reset
+
+
+
+
+# if you are using RHEL
+
+sudo firewall-cmd --zone=public --add-port=10051/tcp --permanent
+sudo firewall-cmd --zone=public --add-port=10050/tcp --permanent
+sudo firewall-cmd --zone=public --add-service=http --permanent
+sudo firewall-cmd --reload
+sudo firewall-cmd --list-all
+
 ```
+

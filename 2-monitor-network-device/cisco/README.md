@@ -1,4 +1,4 @@
-ip access-list standard snmp
+ip access-list standard snmp-acl
 permit 10.10.10.254
 exit
-snmp-server community iman ro snmp
+snmp-server community iman ro snmp-acl

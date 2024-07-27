@@ -21,6 +21,10 @@ apt install zabbix-proxy-sqlite3
 
 vim /etc/zabbix/zabbix_proxy.conf
 
+ProxyMode: 
+    0 - proxy in the active mode
+    1 - proxy in the passive mode
+
 #### 
 # ProxyMode=0
 Server=10.10.10.10  # zabbix server ip
