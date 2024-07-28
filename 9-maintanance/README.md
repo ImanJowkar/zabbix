@@ -1,9 +1,39 @@
 # reset zabbix password
 
 ```
+
+htpasswd -bnBC 10 "" YourNewPassword | tr -d ':'
+# copy the output
+
+update users set passwd='<copied output>' where alias='Admin';          # zabbix 5
+update users set passwd='<copied output>' where username='Admin';       # zabbix 6, 7
+
 UPDATE users SET passwd = '$2a$10$ZXIvHAEP2ZM.dLXTm6uPHOMVlARXX7cqjbhM6Fn0cANzkCQBWpMrS' WHERE username = 'Admin';
 
 ```
+
+
+
+### you can change the login type in database 
+```
+mariadb -u root -p
+show databases;
+use zabbix;
+
+select authentication_type from config;
+
+        0: Internal
+        1: LDAP
+
+update config set authentication_type=1;
+select authentication_type from config;
+
+
+```
+
+
+
+
 
 
 # Disk 
