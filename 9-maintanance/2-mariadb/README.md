@@ -33,6 +33,7 @@ alter user 'root'@'localhost' identified by 'root';
 ```
 
 
+
 ## resotre sakila-db
 
 ```
@@ -49,12 +50,16 @@ mariadb -u root -p < sakila-data.sql
 
 
 
+## basic administration
+```
+use sakila
+show tables;
 
 
 
 
 
-
+```
 
 
 
@@ -76,6 +81,37 @@ SELECT  * from Invoice as t1
 WHERE t1.Total  > 9;
 
 
+
+
+```
+
+
+## zabbix administartion
+
+```
+
+[mysqld]
+# General Settings
+user = mysql
+pid-file = /var/run/mysqld/mysqld.pid
+socket = /var/run/mysqld/mysqld.sock
+datadir = /var/lib/mysql
+log_error = /var/log/mysql/error.log
+
+# Performance Settings
+max_connections = 1000
+innodb_buffer_pool_size = 1G
+innodb_log_file_size = 256M
+innodb_flush_log_at_trx_commit = 1
+sync_binlog = 1
+
+# Query Cache (Optional)
+query_cache_size = 0
+query_cache_type = 0
+
+# Binary Logging (Optional)
+log_bin = /var/log/mysql/mysql-bin.log
+server_id = 1
 
 
 ```

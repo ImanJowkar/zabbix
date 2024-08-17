@@ -85,7 +85,3 @@ chmod 644 /etc/zabbix/web/zabbix.conf.php
 
 ```
 
-
-# context switching
-
-![img](img/context-switching.png)
