@@ -2,6 +2,15 @@ from fastapi import FastAPI, HTTPException, Body, Path
 from pydantic import BaseModel
 from typing import List, Dict
 from pyzabbix import ZabbixAPI
+from datetime import datetime
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+
+zbx_url = os.getenv('zbx_url')
+zbx_user = os.getenv('zbx_user')
+zbx_pass =  os.getenv('zbx_pass')
 
 
 app = FastAPI(
@@ -15,35 +24,67 @@ app = FastAPI(
 
 
 
-# class Item(BaseModel):
-#     hostid: int = Path()
-#     description: str = None
-#     price: float
-#     tax: float = None
-
-# @app.post('/api/create')
-# def create(items: Item):
-#     return items
-
-
-
-
-@app.get('/list-hosts')
-def list_hosts(hostgroup_id: int):
-    zapi = ZabbixAPI("http://192.168.56.200/zabbix")
-    zapi.login("Admin", "zabbix")
-    # hosts = zapi.host.get(output=["hostid", "host"], groupids=hostgroup_id)
+@app.get('/api/list-hosts')
+def list_hosts():
+    zapi = ZabbixAPI(zbx_url)
+    zapi.login(zbx_user, zbx_pass)
     hosts = zapi.host.get()
     zapi.user.logout()
     return hosts
 
-@app.get('/list-hostgroup')
+@app.get('/api/list-hostgroup')
 def list_hostgroup():
-    zapi = ZabbixAPI("http://192.168.56.200/zabbix")
-    zapi.login("Admin", "zabbix")
+    zapi = ZabbixAPI(zbx_url)
+    zapi.login(zbx_user, zbx_pass)
     host_groups = zapi.hostgroup.get(output=["groupid", "name"])
     zapi.user.logout()
     return host_groups
 
 
+
+@app.get('/api/list-all-item')
+def list_hostgroup(customer_id: int):
+    zapi = ZabbixAPI(zbx_url)
+    zapi.login(zbx_user, zbx_pass)
+    items = zapi.item.get(output=["itemid", "name"],
+                          tags=[{"tag": "customerid", "value": customer_id, "operator": "0"}])
+    zapi.user.logout()
+    return items
+
+
+@app.post('/api/create-ssl-expirey-item', tags=["SSL Expiry Item"])
+def create_item(customer_id: str, host_id: int, interval: str, name: str, destination: str, port: int):
+    zapi = ZabbixAPI(zbx_url)
+    zapi.login(zbx_user, zbx_pass)
+    tags = [
+    {"tag": "customerid", "value": customer_id}
+    ]
+    res = zapi.item.create(hostid=host_id, name=name, type=0, value_type=3, delay=interval,tags=tags,
+                     key_=f"system.run[/zabbix-script/check-ssl.sh {destination} {port}]",
+                     interfaceid=zapi.hostinterface.get(hostids=host_id)[0]['interfaceid'])
+    zapi.user.logout()
+    return res
+    
+@app.put('/api/update-item', tags=["SSL Expiry Item"])
+def create_item(item_id: str, interval: str, name: str, destination: str, port: int):
+    zapi = ZabbixAPI(zbx_url)
+    zapi.login(zbx_user, zbx_pass)
+    res = zapi.item.update(itemid=item_id, name=name, delay=interval,
+                           key_=f"system.run[/zabbix-script/check-ssl.sh {destination} {port}]")
+    zapi.user.logout()
+    return res
+
+
+@app.delete('/api/delete-item', tags=["SSL Expiry Item"])
+def delete_item(item_id: str):
+    zapi = ZabbixAPI(zbx_url)
+    zapi.login(zbx_user, zbx_pass)
+    response = zapi.item.delete(item_id)
+    return response
+
+
+
+@app.get('/api/ssl-expiry-history', tags=["SSL Expiry Item"])
+def get_ssl_history(start_time: datetime = 2023):
+    return start_time.now()
 
