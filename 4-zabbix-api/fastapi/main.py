@@ -43,7 +43,7 @@ def list_hostgroup():
 
 
 @app.get('/api/list-all-item')
-def list_hostgroup(customer_id: int):
+def list_all_item(customer_id: int):
     zapi = ZabbixAPI(zbx_url)
     zapi.login(zbx_user, zbx_pass)
     items = zapi.item.get(output=["itemid", "name"],
@@ -66,7 +66,7 @@ def create_item(customer_id: str, host_id: int, interval: str, name: str, destin
     return res
     
 @app.put('/api/update-item', tags=["SSL Expiry Item"])
-def create_item(item_id: str, interval: str, name: str, destination: str, port: int):
+def update_item(item_id: str, interval: str, name: str, destination: str, port: int):
     zapi = ZabbixAPI(zbx_url)
     zapi.login(zbx_user, zbx_pass)
     res = zapi.item.update(itemid=item_id, name=name, delay=interval,
@@ -80,11 +80,24 @@ def delete_item(item_id: str):
     zapi = ZabbixAPI(zbx_url)
     zapi.login(zbx_user, zbx_pass)
     response = zapi.item.delete(item_id)
+    zapi.user.logout()
     return response
 
 
 
 @app.get('/api/ssl-expiry-history', tags=["SSL Expiry Item"])
-def get_ssl_history(start_time: datetime = 2023):
-    return start_time.now()
+def get_ssl_history(start_time: str="2024-04-5 22:17:21", end_time: str="2024-04-5 21:42:31",  itemid: int = None, customerid: int = None):
+    zapi = ZabbixAPI(zbx_url)
+    zapi.login(zbx_user, zbx_pass)
+    start_time = int(datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S").timestamp())
+    end_time = int(datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S").timestamp())
+    history = zapi.history.get(
+        itemids=itemid,
+        time_from=start_time,
+        time_till=end_time,
+        output='extend',
+        limit=100)
+    zapi.user.logout()
+    # )2024-08-19 00:00:00
+    return history
 
