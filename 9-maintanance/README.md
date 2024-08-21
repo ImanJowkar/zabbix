@@ -86,3 +86,10 @@ chmod 644 /etc/zabbix/web/zabbix.conf.php
 
 ```
 
+# Performance Tuning
+```
+
+
+
+```
+
