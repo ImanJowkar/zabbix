@@ -87,9 +87,57 @@ chmod 644 /etc/zabbix/web/zabbix.conf.php
 ```
 
 # Performance Tuning
+[ref](https://youtube.come)
+![img](img/1.png)
+![img](img/2.png)
+
+
+### install ntop on debain 12
+[ref](https://green.cloud/docs/how-to-install-ntopng-on-debian-12/)
+
+```
+
+apt update && apt install software-properties-common wget
+
+source /etc/os-release
+wget https://packages.ntop.org/apt/$VERSION_CODENAME/all/apt-ntop.deb
+apt install ./apt-ntop.deb
+
+
+apt update && apt install ntopng
+netstat -ntlp
+
+
+http://localhost:3000
+
+user, pass: admin, admin
+
+
 ```
 
 
+![img](img/3.png)
+![img](img/4.png)
+![img](img/5.png)
+![img](img/6.png)
+![img](img/7.png)
 
-```
+### proxy tunning
 
+![img](img/8.png)
+![img](img/9.png)
+
+
+### database tunning
+
+![img](img/10.png)
+![img](img/11.png)
+
+
+### unchanged items
+![img](img/12.png)
+
+
+
+### deploy on seprate machine
+![img](img/13.png)
