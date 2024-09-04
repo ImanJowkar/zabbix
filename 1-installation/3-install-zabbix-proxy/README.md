@@ -35,3 +35,15 @@ DBName=/tmp/zabbix_proxy.db
 systemctl restart zabbix-proxy
 systemctl enable zabbix-proxy
 ```
+
+## enable psk for encryption between zbx-server and zbx-proxy
+
+```
+
+
+
+
+
+
+
+```

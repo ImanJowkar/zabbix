@@ -141,3 +141,17 @@ user, pass: admin, admin
 
 ### deploy on seprate machine
 ![img](img/13.png)
+
+
+
+
+
+## Set https on zabbix
+
+```
+
+
+
+
+
+```
