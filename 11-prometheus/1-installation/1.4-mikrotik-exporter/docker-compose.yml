@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+  mktxp:
+    image: ghcr.io/akpw/mktxp:gha-7614306238
+    container_name: mikrotik-mktxp
+    volumes:
+      # Since Version v0.37 mktxp runs as single user
+      # Prior it was root
+      - './mktxp/:/home/mktxp/mktxp/'
+    networks:
+      - monitoring
+    restart: unless-stopped
+
+
+  blackbox:
+    image: quay.io/prometheus/blackbox-exporter:latest
+    container_name: mikrotik-blackbox-exporter
+    command: --config.file=/config/blackbox.yml
+    volumes:
+      - ./blackbox/blackbox.yml:/config/blackbox.yml
+    networks:
+      - monitoring
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:v2.45.3
+    container_name: mikrotik-prometheus
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=1y' # <= adjust the storage retention period of Prometheus
+    restart: unless-stopped
+    networks:
+      - monitoring
+    ports:
+      - "9090:9090"
+networks:
+  monitoring:
+
+volumes:
+  prometheus_data:

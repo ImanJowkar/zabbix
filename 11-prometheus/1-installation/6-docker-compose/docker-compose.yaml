@@ -1,0 +1,59 @@
+version: '3.8'
+services:
+  prometheus:
+    image: hub.hamdocker.ir/prom/prometheus:v2.51.2
+    container_name: prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--web.listen-address=0.0.0.0:9090'
+      - '--web.config.file=/etc/prometheus/web.yaml'
+      - '--query.max-concurrency=100'
+    ports:
+      - 9090:9090
+    restart: unless-stopped
+    volumes:
+      - ./prometheus-config:/etc/prometheus/
+      - prom_data:/prometheus
+    networks:
+      - monitoring
+  grafana:
+    image: hub.hamdocker.ir/grafana/grafana
+    container_name: grafana
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - monitoring
+
+  blackbox:
+    container_name: blackbox
+    image: hub.hamdocker.ir/bitnami/blackbox-exporter:0-debian-12
+    ports:
+    - 9115:9115
+    command:
+    - --config.file=/etc/blackbox/blackbox.yml
+    volumes:
+    - ./blackbox/blackbox.yml:/etc/blackbox/blackbox.yml
+    networks:
+      - monitoring
+
+  loki:
+    container_name: loki
+    image: hub.hamdocker.ir/grafana/loki:2.9.10
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - monitoring
+
+
+volumes:
+  prom_data:
+  grafana_data:
+
+
+networks:
+  monitoring:
+    driver: bridge

@@ -1,0 +1,29 @@
+- targets:
+    - host1.example.com:9090
+    - host2.example.com:9090
+  labels:
+    environment: production
+    service: web-server
+    city: rasht
+    job: node
+
+
+
+- targets:
+    - host5.example.com:9090
+    - host6.example.com:9090
+  labels:
+    environment: staging
+    service: database
+    city: shiraz
+    job: node
+
+
+- targets:
+    - host7.example.com:9090
+    - host8.example.com:9090
+  labels:
+    environment: development
+    service: cache
+    city: esfahan
+    job: node

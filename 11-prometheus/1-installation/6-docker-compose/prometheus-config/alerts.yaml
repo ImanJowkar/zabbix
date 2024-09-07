@@ -1,0 +1,12 @@
+groups:
+  - name: Alert
+    rules:
+      - alert: Is node exporter running
+        expr: up{instance="192.168.56.221:9100"} == 0
+        for: 1m
+        labels:
+          team: SRE
+          severity: Critical
+        annotations:
+          summary: "node exporter is down {{ $labels }}"
+          description: "SRE team must Resolve it {{ $value }}"
