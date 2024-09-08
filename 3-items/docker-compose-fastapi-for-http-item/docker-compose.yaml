@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  fastapi:
+    image: app:ver1
+    expose:
+      - "8000"
+
+  nginx:
+    image: hub.hamdocker.ir/nginx:alpine
+    ports:
+      - "81:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/cert.pem:/etc/ssl/certs/cert.pem
+      - ./nginx/key.pem:/etc/ssl/private/key.pem
+      - ./nginx/.htpasswd:/etc/nginx/.htpasswd
+    depends_on:
+      - fastapi

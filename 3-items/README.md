@@ -91,3 +91,14 @@ sender = Sender('127.0.0.1', 10051, chunk_size=2)
 response = sender.send(items)
 ```
 In the example above, the chunk size is set to 2. So, 5 values passed will be sent in three requests of two, two, and one value, respectively.
+
+### read api with http item
+
+![img](img/4.png)
+![img](img/5.png)
+![img](img/6.png)
+
+```
+
+
+```
