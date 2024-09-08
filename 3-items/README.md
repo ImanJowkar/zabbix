@@ -97,8 +97,3 @@ In the example above, the chunk size is set to 2. So, 5 values passed will be se
 ![img](img/4.png)
 ![img](img/5.png)
 ![img](img/6.png)
-
-```
-
-
-```
