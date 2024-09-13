@@ -4,7 +4,7 @@ services:
   fastapi:
     image: app:ver1
     expose:
-      - "8000"
+      - "5000"
 
   nginx:
     image: hub.hamdocker.ir/nginx:alpine
