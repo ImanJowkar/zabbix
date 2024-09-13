@@ -1,41 +1,40 @@
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-from typing import List, Dict
+from collections import defaultdict
 
 app = FastAPI()
 
-class Item(BaseModel):
-    id: int
-    name: str
+# Predefined item counts initialized to zero
+predefined_counts = {
+    "apple": 0,
+    "kiwi": 0,
+    "papaya": 0
+}
 
-items: Dict[int, Item] = {}
+# Dictionary to hold counts of items
+item_counts = defaultdict(int)
 
-@app.post("/items/", response_model=Item)
-def create_item(item: Item):
-    if item.id in items:
-        raise HTTPException(status_code=400, detail="Item already exists")
-    items[item.id] = item
-    return item
 
-@app.get("/items/", response_model=List[Item])
-def read_items():
-    return list(items.values())
+@app.get("/")
+async def read_root():
+    return {"message": "Welcome to the Item Management API!"}
 
-@app.get("/items/{item_id}", response_model=Item)
-def read_item(item_id: int):
-    if item_id not in items:
-        raise HTTPException(status_code=404, detail="Item not found")
-    return items[item_id]
+@app.post("/items/{item_name}")
+async def create_item(item_name: str):
+    """Create an item and initialize its count."""
+    item_counts[item_name] += 1
+    return {"message": f"Item '{item_name}' created.", "count": item_counts[item_name]}
 
-@app.put("/items/{item_id}", response_model=Item)
-def update_item(item_id: int, item: Item):
-    if item_id not in items:
-        raise HTTPException(status_code=404, detail="Item not found")
-    items[item_id] = item
-    return item
+@app.get("/items")
+async def get_items_count():
+    """Get the count of all items including predefined counts."""
+    all_counts = {**predefined_counts, **dict(item_counts)}
+    return {"items": all_counts}
 
-@app.delete("/items/{item_id}", response_model=Item)
-def delete_item(item_id: int):
-    if item_id not in items:
-        raise HTTPException(status_code=404, detail="Item not found")
-    return items.pop(item_id)
+@app.delete("/items/{item_name}")
+async def delete_item(item_name: str):
+    """Delete an item, reducing its count."""
+    if item_counts[item_name] > 0:
+        item_counts[item_name] -= 1
+        return {"message": f"Item '{item_name}' deleted.", "count": item_counts[item_name]}
+    else:
+        raise HTTPException(status_code=404, detail="Item not found or count is zero.")
