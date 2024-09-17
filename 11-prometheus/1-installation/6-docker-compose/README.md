@@ -1,8 +1,16 @@
 ### How to run
 
 ```
+# generate public and private key for prometheus
 openssl req -new -newkey rsa:2048 -days 30 -nodes -x509 -keyout ./prometheus-config/host.key -out ./prometheus-config/host.crt
+chmod go+r host.key
 
+
+
+# generate public and private key for grafana
+openssl req -new -newkey rsa:2048 -days 30 -nodes -x509 -keyout ./grafana/file.key -out ./grafana/file.crt
+
+chmod go+r file.key
 
 docker compose up -d
 

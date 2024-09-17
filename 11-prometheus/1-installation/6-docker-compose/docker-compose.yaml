@@ -16,16 +16,27 @@ services:
       - prom_data:/prometheus
     networks:
       - monitoring
+
+
   grafana:
-    image: hub.hamdocker.ir/grafana/grafana
+    image: hub.hamdocker.ir/grafana/grafana:11.2.0-ubuntu
     container_name: grafana
     ports:
       - 3000:3000
     restart: unless-stopped
     volumes:
       - grafana_data:/var/lib/grafana
+      - ./grafana/file.crt:/etc/grafana/file.crt
+      - ./grafana/file.key:/etc/grafana/file.key
+    environment:
+      - GF_SERVER_HTTP_PORT=3000
+      - GF_SERVER_PROTOCOL=https
+      - GF_SERVER_CERT_FILE=/etc/grafana/file.crt
+      - GF_SERVER_CERT_KEY=/etc/grafana/file.key
     networks:
       - monitoring
+
+
 
   blackbox:
     container_name: blackbox
@@ -39,19 +50,23 @@ services:
     networks:
       - monitoring
 
+
+
   loki:
     container_name: loki
     image: hub.hamdocker.ir/grafana/loki:2.9.10
     ports:
       - "3100:3100"
     command: -config.file=/etc/loki/local-config.yaml
+    volumes:
+      - loki_data:/loki
     networks:
       - monitoring
-
 
 volumes:
   prom_data:
   grafana_data:
+  loki_data:
 
 
 networks:
