@@ -8,7 +8,10 @@ modules:
     http:
       method: POST
   tcp_connect:
+    timeout: 5s
     prober: tcp
+    tcp:
+      preferred_ip_protocol: "ipv4"
   pop3s_banner:
     prober: tcp
     tcp:
@@ -51,4 +54,4 @@ modules:
     prober: icmp
     timeout: 5s
     icmp:
-      ttl: 20
+      ttl: 5
