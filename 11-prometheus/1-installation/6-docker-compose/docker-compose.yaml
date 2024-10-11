@@ -7,7 +7,11 @@ services:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--web.listen-address=0.0.0.0:9090'
       - '--web.config.file=/etc/prometheus/web.yaml'
-      - '--query.max-concurrency=100'
+      - '--query.max-concurrency=1000'
+      - '--storage.tsdb.retention.time=19d'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
     ports:
       - 9090:9090
     restart: unless-stopped
@@ -60,6 +64,26 @@ services:
     command: -config.file=/etc/loki/local-config.yaml
     volumes:
       - loki_data:/loki
+    networks:
+      - monitoring
+
+  node-exporter:
+    image: hub.hamdocker.ir/prom/node-exporter:v1.8.2
+    container_name: node-exporter
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+      - ./node-exporter/:/etc/node_exporter
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+      - '--web.config.file=/etc/node_exporter/web.yaml'
+    ports:
+      - 9100:9100
     networks:
       - monitoring
 

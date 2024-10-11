@@ -12,6 +12,15 @@ openssl req -new -newkey rsa:2048 -days 30 -nodes -x509 -keyout ./grafana/file.k
 
 chmod go+r file.key
 
+
+
+# generate public and private key for node-exporter
+
+openssl req -new -newkey rsa:2048 -days 30 -nodes -x509 -keyout ./node-exporter/file.key -out ./node-exporter/file.crt
+
+chmod go+r file.key
+
+
 docker compose up -d
 
 ```
