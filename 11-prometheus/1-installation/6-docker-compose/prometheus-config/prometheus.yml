@@ -33,6 +33,7 @@ scrape_configs:
         - 8.8.8.8
         - 1.1.1.1
         - "google.com"
+        - 1.2.3.1
     metrics_path: /probe
     params:
       module: [icmp]

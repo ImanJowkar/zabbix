@@ -6,9 +6,6 @@
     service: web-server
     city: rasht
     job: node
-
-
-
 - targets:
     - host5.example.com:9090
     - host6.example.com:9090
@@ -17,8 +14,6 @@
     service: database
     city: shiraz
     job: node
-
-
 - targets:
     - host7.example.com:9090
     - host8.example.com:9090
@@ -27,3 +22,7 @@
     service: cache
     city: esfahan
     job: node
+- targets:
+    - 192.168.56.90:9100
+  labels:
+    server: prometheus-server
