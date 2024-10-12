@@ -74,9 +74,9 @@ sudo ufw reset
 
 # if you are using RHEL
 
-sudo firewall-cmd --zone=public --add-port=10051/tcp --permanent
-sudo firewall-cmd --zone=public --add-port=10050/tcp --permanent
-sudo firewall-cmd --zone=public --add-service=http --permanent
+sudo firewall-cmd  --add-port=10051/tcp --permanent
+sudo firewall-cmd  --add-port=10050/tcp --permanent
+sudo firewall-cmd  --add-service=http --permanent
 sudo firewall-cmd --reload
 sudo firewall-cmd --list-all
 
