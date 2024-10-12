@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  blackbox:
+    container_name: blackbox
+    image: hub.hamdocker.ir/bitnami/blackbox-exporter:0-debian-12
+    ports:
+    - 9115:9115
+    command:
+    - --config.file=/etc/blackbox/blackbox.yml
+    volumes:
+    - ./blackbox/blackbox.yml:/etc/blackbox/blackbox.yml
+    networks:
+      - monitoring
+
+
+networks:
+  monitoring:
+    driver: bridge
