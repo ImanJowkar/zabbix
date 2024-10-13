@@ -14,7 +14,7 @@ services:
       - '--web.console.templates=/etc/prometheus/consoles'
     ports:
       - 9090:9090
-    restart: unless-stopped
+    restart: always
     volumes:
       - ./prometheus-config:/etc/prometheus/
       - prom_data:/prometheus
@@ -27,7 +27,7 @@ services:
     container_name: grafana
     ports:
       - 3000:3000
-    restart: unless-stopped
+    restart: always
     volumes:
       - grafana_data:/var/lib/grafana
       - ./grafana/file.crt:/etc/grafana/file.crt
@@ -45,6 +45,7 @@ services:
   blackbox:
     container_name: blackbox
     image: hub.hamdocker.ir/bitnami/blackbox-exporter:0-debian-12
+    restart: always
     ports:
     - 9115:9115
     command:
@@ -59,6 +60,7 @@ services:
   loki:
     container_name: loki
     image: hub.hamdocker.ir/grafana/loki:2.9.10
+    restart: always
     ports:
       - "3100:3100"
     command: -config.file=/etc/loki/local-config.yaml
@@ -70,7 +72,7 @@ services:
   node-exporter:
     image: hub.hamdocker.ir/prom/node-exporter:v1.8.2
     container_name: node-exporter
-    restart: unless-stopped
+    restart: always
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
