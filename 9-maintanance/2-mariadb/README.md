@@ -30,60 +30,42 @@ alter user 'root'@'localhost' identified by 'root';
  use mysql;
  select host,user,password from user;
 
+
+```
+
+## backup and resotre zabbix database
+
+```
+# take a backup
+mysqldump --single-transaction  --no-tablespaces -u root -p  zabbix > zabbix.sql
+
+# make a damage
+mysql -u root -p
+show databases;
+drop zabbix;
+show databases;
+
+
+
+# restore the database
+mysql -u root -p
+create database zabbix character set utf8mb4 collate utf8mb4_bin;
+set global log_bin_trust_function_creators = 1;
+quit;
+
+mariadb -u root -p zabbix < zabbix.sql
+
+mysql -uroot -p
+ set global log_bin_trust_function_creators = 0;
+ quit;
 ```
 
 
 
-## resotre sakila-db
-
-```
-tar -xvf sakila-db.tar.gz
-
-cd sakila-db
-mariadb -u root -p < sakila-schema.sql
-mariadb -u root -p < sakila-data.sql
 
 
 
 
-```
-
-
-
-## basic administration
-```
-use sakila
-show tables;
-
-
-
-
-
-```
-
-
-
-
-
-
-# old
-
-```
-# resoter data: 
-mariadb -u root -p < Chinook.sql
-
-
-
-# afew query
-SELECT * from Track WHERE Bytes > (SELECT AVG(Bytes) from Track ) ;
-
-SELECT  * from Invoice as t1
-WHERE t1.Total  > 9;
-
-
-
-
-```
 
 
 ## zabbix administartion
