@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  csv_generator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - csv_data:/app/data
+    restart: always
+
+  nginx:
+    image: hub.hamdocker.ir/nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - csv_data:/usr/share/nginx/csv:ro
+      - ./nginx/app.conf:/etc/nginx/conf.d/default.conf:ro
+    restart: always
+
+volumes:
+  csv_data:

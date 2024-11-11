@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  grafana:
+    image: hub.hamdocker.ir/grafana/grafana:11.2.0-ubuntu
+    container_name: grafana
+    ports:
+      - 3000:3000
+    restart: always
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/file.crt:/etc/grafana/file.crt
+      - ./grafana/file.key:/etc/grafana/file.key
+    environment:
+      - GF_SERVER_HTTP_PORT=3000
+      - GF_SERVER_PROTOCOL=https
+      - GF_SERVER_CERT_FILE=/etc/grafana/file.crt
+      - GF_SERVER_CERT_KEY=/etc/grafana/file.key
+    networks:
+      - monitoring
+
+volumes:
+  grafana_data:
+
+
+
+networks:
+  monitoring:
+    driver: bridge
