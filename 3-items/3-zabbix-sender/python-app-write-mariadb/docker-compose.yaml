@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: db
+    image: hub.hamdocker.ir/mariadb:10.5
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: OrdersDB
+      MYSQL_USER: app
+      MYSQL_PASSWORD: apppassword
+    ports:
+      - 3307:3306
+    volumes:
+      - db_data:/var/lib/mysql
+
+  app:
+    build: ./app
+    restart: always
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: app
+      DB_PASSWORD: apppassword
+    depends_on:
+      - db
+
+
+volumes:
+  db_data:

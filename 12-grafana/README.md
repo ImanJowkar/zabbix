@@ -21,3 +21,4 @@ unzip file.zip
 cp -r alexanderzobnin-zabbix-app /var/lib/grafana/plugins
 
 ```
+
