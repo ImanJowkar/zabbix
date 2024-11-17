@@ -41,7 +41,7 @@ select authentication_type from config;
 ```
 
 find / -size +10M
-sed -i 's/OF1-T-2/OF1-T-3/g' /etc/zabbix/zabbix.conf
+sed -i 's/find/pattern/g' /etc/zabbix/zabbix.conf
 
 sudo -H -u zabbix bash -c 'tail -f /var/log/nginx/access.log'
 ```

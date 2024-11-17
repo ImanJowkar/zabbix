@@ -22,7 +22,7 @@ chown -R zabbix: /zabbix/files/zbx-script
 chmod u+x /zabbix/files/zbx-script/check-ssl.sh
 # enable system.run in zabbix-agent
 vim /etc/zabbix/zabbix_agent.conf
-AllowKey=system.run[/zabbix/files/zbx-script/check-ssl.sh $1 $2]
+AllowKey=system.run[/zabbix/files/zbx-script/check-ssl.sh*]
 
 
 ```
@@ -73,8 +73,6 @@ resp = sender.send_value('rockey-1', 'mykey', 40)
 print(resp)
 
 ```
-[ref](https://blog.zabbix.com/python-zabbix-utils/27056/)
-For cases when there is a necessity to send more values than Zabbix Trapper can accept at one time, there is an option for fragmented sending, i.e. sequential sending in separate fragments (chunks). By default, the chunk size is set to 250 values. In other words, when sending values in bulk, the 400 values passed to the send() method for sending will be sent in two stages. 250 values will be sent first, and the remaining 150 values will be sent after receiving a response. The chunk size can be changed, to do this, you simply need to specify your value for the chunk_size parameter when initializing Sender:
 ```
 from zabbix_utils import ItemValue, Sender
 
