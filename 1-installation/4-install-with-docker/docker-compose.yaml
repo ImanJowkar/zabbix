@@ -1,0 +1,62 @@
+version: '3.8'
+services:
+  mysql-server:
+    image: hub.hamdocker.ir/mysql:8.0
+    container_name: mysql-server
+    environment:
+      - MYSQL_DATABASE=zabbixdb
+      - MYSQL_USER=zabbix
+      - MYSQL_PASSWORD=Admin
+      - MYSQL_ROOT_PASSWORD=Admin
+    command:
+      - --character-set-server=utf8
+      - --collation-server=utf8_bin
+      - --default-authentication-plugin=mysql_native_password
+    networks:
+      - zabbix-net
+    restart: always
+    volumes:
+      - db-data:/var/lib/mysql
+
+  zabbix-server-mysql:
+    image: hub.hamdocker.ir/zabbix/zabbix-server-mysql:alpine-6.0-latest
+    container_name: zabbix-server-mysql
+    environment:
+      - DB_SERVER_HOST=mysql-server
+      - MYSQL_DATABASE=zabbixdb
+      - MYSQL_USER=zabbix
+      - MYSQL_PASSWORD=Admin
+      - MYSQL_ROOT_PASSWORD=Admin
+    ports:
+      - "10051:10051"
+    networks:
+      - zabbix-net
+    restart: always
+    depends_on:
+      - mysql-server
+
+  zabbix-web-nginx-mysql:
+    image: hub.hamdocker.ir/zabbix/zabbix-web-nginx-mysql:alpine-6.0-latest
+    container_name: zabbix-web-nginx-mysql
+    environment:
+      - ZBX_SERVER_HOST=zabbix-server-mysql
+      - DB_SERVER_HOST=mysql-server
+      - MYSQL_DATABASE=zabbixdb
+      - MYSQL_USER=zabbix
+      - MYSQL_PASSWORD=Admin
+      - MYSQL_ROOT_PASSWORD=Admin
+    ports:
+      - "80:8080"
+    networks:
+      - zabbix-net
+    restart: always
+    depends_on:
+      - mysql-server
+      - zabbix-server-mysql
+
+networks:
+  zabbix-net:
+    driver: bridge
+
+volumes:
+  db-data:
