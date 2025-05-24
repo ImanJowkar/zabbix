@@ -1,13 +1,9 @@
 ## install zabbix proxy
 
-```
+```sh
 sudo apt install sqlite3
 
 
-```
-
-
-```
 # wget https://repo.zabbix.com/zabbix/7.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_7.0-1+ubuntu20.04_all.deb
 # dpkg -i zabbix-release_7.0-1+ubuntu20.04_all.deb
 # apt update
@@ -38,10 +34,9 @@ systemctl enable zabbix-proxy
 
 
 
-# enable psk between zabbix server and zabbix proxy
+## enable psk between zabbix server and zabbix proxy
 
-```
-
+```sh
 # generate a random number for using as a secret in zabbix
 
 cd /etc/zabbix
@@ -52,7 +47,6 @@ chown zabbix: secret.psk
 
 
 # add below config to you zabbix_proxy.conf or zabbix_agent.conf
-
 TLSConnect=psk
 TLSAccept=psk
 TLSPSKIdentity=proxy
@@ -66,9 +60,9 @@ TLSPSKFile=/etc/zabbix/secret.psk
 
 
 
-# zabbix-proxy high availability
+## zabbix-proxy high availability
 
-```
+```sh
 
 
 
