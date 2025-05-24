@@ -22,7 +22,8 @@ gpgcheck = 1
 EOF
 
 
-dnf list | grep mariadb
+dnf makecache
+dnf list | grep MariaDB-server 
 sudo dnf install MariaDB-server MariaDB-client
 mariadb-secure-installation
 

@@ -66,12 +66,84 @@ sudo ufw reset
 
 
 # if you are using RHEL
+firewall-cmd --state
+firewall-cmd --get-default-zone
+firewall-cmd --get-active-zones
+firewall-cmd --list-all
+firewall-cmd --get-zones
+firewall-cmd --list-all --zone=home
 
-sudo firewall-cmd  --add-port=10051/tcp --permanent
-sudo firewall-cmd  --add-port=10050/tcp --permanent
-sudo firewall-cmd  --add-service=http --permanent
-sudo firewall-cmd --reload
-sudo firewall-cmd --list-all
+
+firewall-cmd --list-all --zone=drop
+firewall-cmd --list-all --permanent --zone=drop
+
+
+
+firewall-cmd --zone=drop --change-interface=ens32 --permanent
+firewall-cmd --reload
+firewall-cmd --get-default-zone
+firewall-cmd --get-active-zones
+firewall-cmd --list-all --permanent --zone=drop
+
+# firewall-cmd --zone=drop --add-service=zabbix-server --permanent
+firewall-cmd  --add-port=10051/tcp --zone=drop --permanent
+firewall-cmd  --add-port=10050/tcp --zone=drop --permanent
+
+firewall-cmd --zone=drop --add-port=80/tcp --permanent
+firewall-cmd --zone=drop --add-port=443/tcp --permanent
+
+# firewall-cmd --zone=drop --add-port=3306/tcp --permanent
+
+firewall-cmd --reload
+firewall-cmd --zone=drop --list-all 
 
 ```
 
+## if you get system-locale error when setting up zabbix install below package
+
+```sh
+# On RHEL/CentOS/Alma/Rocky
+sudo dnf install glibc-langpack-en -y
+
+# On Debian/Ubuntu
+sudo apt install locales -y
+sudo dpkg-reconfigure locales
+
+```
+
+## config selinux for zabbix
+```sh
+
+getenforce
+
+setenforce 0 # disable temporary
+vim /etc/selinux/config
+----
+SELINUX=enforcing
+SELINUXTYPE=targeted
+---
+
+
+
+tail -f /var/log/audit/audit.log
+
+sudo dnf install policycoreutils-python-utils
+grep zabbix /var/log/audit/audit.log | audit2allow
+getsebool -a
+getsebool -a | grep zabbix
+setsebool -P zabbix_can_network=1
+getsebool -a | grep zabbix
+
+grep zabbix /var/log/audit/audit.log | audit2allow -M newmodule
+semodule -i newmodule.pp
+
+setenforce 0
+getenforce
+systemctl restart zabbix-server.service
+systemctl restart zabbix-agent.service
+setenforce 1
+getenforce
+
+
+
+```
