@@ -256,3 +256,11 @@ TLSPSKFile=/etc/zabbix/secret.psk
 # next enable encryption in zabbix UI like below image
 ```
 ![img](img/14.png)
+
+
+
+
+# context switching
+
+![img](./9-maintanance/img/context-switching.png)
+
