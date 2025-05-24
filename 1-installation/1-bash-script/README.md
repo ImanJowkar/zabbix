@@ -1,15 +1,12 @@
 ## Zabbix-server installation
 
 
-```
+```sh
 ## install mariadb
 
 sudo apt update
 sudo apt install mariadb-server
 sudo mysql_secure_installation
-
-
-
 
 # install zabbix 
 
@@ -34,7 +31,6 @@ zcat /usr/share/zabbix-sql-scripts/mysql/server.sql.gz | mysql --default-charact
 
 
 
-
 mariadb -uroot -p
 set global log_bin_trust_function_creators = 0;
 quit;
@@ -50,9 +46,6 @@ DBPassword=password
 
 sudo systemctl restart zabbix-server zabbix-agent apache2
 sudo systemctl enable zabbix-server zabbix-agent apache2
-
-
-
 
 
 
