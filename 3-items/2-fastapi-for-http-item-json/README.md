@@ -34,3 +34,8 @@ you can see your graph in the latest data section
 ![alt text](img/latest-data.png)
 
 Now, head over to the dashboard and create a graph based on this item.
+
+
+## you can add trigger too
+
+![alt text](img/trigger.png)
