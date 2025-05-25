@@ -39,3 +39,11 @@ Now, head over to the dashboard and create a graph based on this item.
 ## you can add trigger too
 
 ![alt text](img/trigger.png)
+
+
+## you can add trigger dashboard too
+![alt text](img/trigger-dashboard.png)
+
+
+## and this is the final dashboard
+![alt text](img/final-dashboard.png)
