@@ -147,7 +147,7 @@ my-server custom.key2 456
 
 
 
-
+# another example
 
 `you can use below python script to send data to zabbix`
 
