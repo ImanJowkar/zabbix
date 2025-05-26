@@ -1,0 +1,78 @@
+---
+- name: Install Zabbix Agent
+  hosts: ubuntu_servers
+  become: yes
+  vars:
+    ansible_become_timeout: 300
+    zabbix_ubuntu22: "https://repo.zabbix.com/zabbix/7.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_latest+ubuntu22.04_all.deb"
+    zabbix_ubuntu20: "https://repo.zabbix.com/zabbix/7.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_latest+ubuntu20.04_all.deb"
+    zabbix_server_ip: 192.168.229.10
+    host_metadata: "Linux-ubuntu"
+    dns_server: 8.8.8.8
+
+  tasks:
+
+    - name: check the os
+      fail:
+        msg: "This playbook can only be applied to Ubuntu 20 and 22."
+      when: ansible_distribution != 'Ubuntu' or (ansible_distribution_major_version != '20' and ansible_distribution_major_version != '22')
+
+    - name: Set the hostname
+      hostname:
+        name: "{{ inventory_hostname }}"
+
+    - name: Update /etc/hosts
+      lineinfile:
+        path: /etc/hosts
+        regexp: '^127\.0\.1\.1'
+        line: "127.0.1.1 {{ inventory_hostname }}"
+        state: present
+
+    - name: Ensure the nameserver is set in /etc/resolv.conf
+      lineinfile:
+        path: /etc/resolv.conf
+        regexp: '^nameserver '
+        line: 'nameserver {{ dns_server }}'  # Replace with your desired nameserver
+        state: present
+
+    - name: Download Zabbix repository for ubuntu 22
+      get_url:
+        url: "{{ zabbix_ubuntu22 }}"
+        dest: /tmp/zabbix.deb
+      when: ansible_distribution == "Ubuntu" and ansible_distribution_version == "22.04"
+
+    - name: Download Zabbix repository for ubuntu 20
+      get_url:
+        url: "{{ zabbix_ubuntu20 }}"
+        dest: /tmp/zabbix.deb
+      when: ansible_distribution == "Ubuntu" and ansible_distribution_version == "20.04"
+
+    - name: Install Zabbix repository
+      apt:
+        deb: /tmp/zabbix.deb
+        state: present
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Zabbix agent
+      apt:
+        name: zabbix-agent
+        state: present
+
+    - name: Update Zabbix agent configuration
+      lineinfile:
+        path: /etc/zabbix/zabbix_agentd.conf
+        regexp: '^{{ item.key }}='
+        line: '{{ item.key }}={{ item.value }}'
+      loop:
+        - { key: 'Server', value: "{{ zabbix_server_ip }}" }
+        - { key: 'ServerActive', value: "{{ zabbix_server_ip }}" }
+        - { key: 'Hostname', value: "{{ inventory_hostname }}" }
+        - { key: 'HostMetadata', value: "{{ host_metadata }}" }
+
+    - name: Restart Zabbix agent
+      systemd:
+        name: zabbix-agent
+        state: restarted
