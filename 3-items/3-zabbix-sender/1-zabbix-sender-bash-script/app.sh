@@ -57,6 +57,6 @@ while true; do
         send_to_zabbix "system-uptime" "$(cat /proc/uptime | awk '{print $1}')"
 
         echo "[$(date)] Sent metrics to zabbix: CPU=$CPU_USAGE%, MEM=$MEM_USAGE%, DISK=$DISK_USAGE"
-
         sleep $INTERVAL
 done
+
