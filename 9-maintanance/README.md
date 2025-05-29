@@ -149,3 +149,26 @@ user, pass: admin, admin
 
 ![img](./9-maintanance/img/context-switching.png)
 
+
+# increase open file descriptors
+[ref](https://www.initmax.com/wiki/zabbix-7-0-and-increasing-system-limits/)
+```bash
+cat /proc/$(pgrep -o zabbix_server)/limits | grep -i "max open file"
+
+mkdir /etc/systemd/system/zabbix-server.service.d
+chmod 755 /etc/systemd/system/zabbix-server.service.d
+
+echo -e "[Service]\nLimitAS=infinity\nLimitRSS=infinity\nLimitNOFILE=10000\nLimitNPROC=1024" \
+| sudo tee /etc/systemd/system/zabbix-server.service.d/override.conf
+
+chmod 644 /etc/systemd/system/zabbix-server.service.d/override.conf
+
+systemctl daemon-reload
+
+systemctl status zabbix-server.service
+
+systemctl restart zabbix-server.service
+
+cat /proc/$(pgrep -o zabbix_server)/limits | grep "Max open files"
+
+```
