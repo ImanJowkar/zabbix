@@ -172,3 +172,14 @@ systemctl restart zabbix-server.service
 cat /proc/$(pgrep -o zabbix_server)/limits | grep "Max open files"
 
 ```
+
+## item optimization
+1) Choose a meaningful item name for you.
+2) select best interval
+3) set good history and trends
+4) always create a template and create item inside it and link the template on host, not directly create item inside the host
+
+## trigger optimization
+1) Choose a meaningful trigger name for you.
+2) Use the appropriate trigger function based on your use case.
+3) always create a template and create item inside it and link the template on host, not directly create item inside the host

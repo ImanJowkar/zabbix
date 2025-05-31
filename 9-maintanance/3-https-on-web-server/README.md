@@ -1,3 +1,14 @@
+## get valid public and private key
+
+```sh
+sudo apt update
+sudo apt install certbot
+
+
+sudo certbot certonly --manual --preferred-challenges dns -d example.com -d '*.example.com'
+
+```
+
 ## Set https on zabbix when using nginx as a web server
 
 
