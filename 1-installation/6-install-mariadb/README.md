@@ -1,10 +1,9 @@
-# Setup mariadb on ubuntu 
-
+# Setup mariadb 
 ## Install the LTS version of that
 
 [MariaDB Lifecycle: End Of Life And Support Status](https://www.itechtics.com/eol/mariadb/)
 
-[ref](https://mariadb.org/download/?t=mariadb&o=true&p=mariadb&r=11.4.4&os=windows&cpu=x86_64&pkg=msi&mirror=archive)
+[add mariadb-repository](https://mariadb.org/download/?t=mariadb&o=true&p=mariadb&r=11.4.4&os=windows&cpu=x86_64&pkg=msi&mirror=archive)
 
 #### installation on RHEL
 ```sh
@@ -32,12 +31,21 @@ mariadb-secure-installation
 
 
 
-#### installation on ubuntu 
+## installation on ubuntu 
+### Install the LTS version of that
+
+
+[MariaDB Lifecycle: End Of Life And Support Status](https://www.itechtics.com/eol/mariadb/)
+
+[add mariadb-repository](https://mariadb.org/download/?t=mariadb&o=true&p=mariadb&r=11.4.4&os=windows&cpu=x86_64&pkg=msi&mirror=archive)
+
+
 ```sh
 apt-cache policy mariadb-server
 
 apt install mariadb-server
 
+mariadb_secure_installation
 ```
 
 # some query
