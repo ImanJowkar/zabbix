@@ -1,3 +1,6 @@
+![repository for download zabbix](https://repo.zabbix.com)
+
+
 # if you got `System locale` error install the folowing pakages:
 
 ```

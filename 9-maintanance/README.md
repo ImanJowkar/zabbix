@@ -1,6 +1,5 @@
-# reset zabbix password
-
-```
+##  reset zabbix password for mariadb
+```sh
 
 htpasswd -bnBC 10 "" YourNewPassword | tr -d ':'
 # copy the output
@@ -14,8 +13,25 @@ UPDATE users SET passwd = '$2a$10$ZXIvHAEP2ZM.dLXTm6uPHOMVlARXX7cqjbhM6Fn0cANzkC
 
 
 
-### you can change the login type in database 
+## reset zabbix password in postgresql database
+
+```sh
+
+iman@node:~$ echo -n 'newsecurepassword' | md5sum
+67bc4a4d0c80c103946d42acc3b2be1b  -
+
+psql
+\c zabbix;
+
+zabbix=# UPDATE users SET passwd='5be9a68073f66a56554e25614e9f1c9a' WHERE username='iman';
+UPDATE 1
+
+
 ```
+
+
+### you can change the login type in database 
+```sh
 mariadb -u root -p
 show databases;
 use zabbix;
