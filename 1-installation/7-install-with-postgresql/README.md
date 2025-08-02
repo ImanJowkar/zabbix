@@ -32,13 +32,12 @@ sudo apt -y install postgresql
 
 
 
-
-
 ```
+
+
 
 ### connect to database engine
 ```sh
-
 sudo su postgres
 psql
 SELECT version();
