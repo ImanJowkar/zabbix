@@ -57,6 +57,7 @@ TLSPSKFile=/etc/zabbix/secret.psk
 ![img](img/14.png)
 
 
+![proxy-config](img/15.png)
 
 ## zabbix-proxy high availability
 
