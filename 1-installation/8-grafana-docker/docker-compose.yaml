@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  grafana:
+    image: hub.hamdocker.ir/grafana/grafana:12.0.4
+    container_name: grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/plugins:/var/lib/grafana/plugins
+    expose:
+      - "3000"
+    restart: unless-stopped
+
+  nginx:
+    image: hub.hamdocker.ir/nginx:alpine
+    container_name: nginx
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./nginx/:/etc/nginx/conf.d
+      - ./certs:/etc/ssl
+    depends_on:
+      - grafana
+    restart: unless-stopped
+
+volumes:
+  grafana_data:
