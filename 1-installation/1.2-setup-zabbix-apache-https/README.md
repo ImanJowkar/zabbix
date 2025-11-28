@@ -75,3 +75,17 @@ RewriteRule ^/(.*)$ https://192.168.85.180/$1 [R=301,L]
 -----
 
 ```
+
+
+## disable server tokens
+```sh
+sudo vim /etc/httpd/conf/httpd.conf
+----
+ServerTokens Prod
+ServerSignature Off
+
+----
+
+
+
+```
