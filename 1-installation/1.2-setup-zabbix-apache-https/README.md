@@ -37,6 +37,9 @@ sudo chmod 600 /etc/pki/tls/private/zabbix.key
 sudo chmod 644 /etc/pki/tls/certs/zabbix.crt
 
 
+dnf install mod_ssl
+
+
 vim /etc/httpd/conf.d/ssl.conf
 ---
 SSLEngine on
