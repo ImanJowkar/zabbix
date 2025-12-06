@@ -3,7 +3,7 @@
 
 # if you got `System locale` error install the folowing pakages:
 
-```
+```sh
 
 dnf install glibc-langpack-en
 
