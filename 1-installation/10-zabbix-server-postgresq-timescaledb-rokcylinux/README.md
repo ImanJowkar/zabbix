@@ -4,6 +4,8 @@
 #### zabbix: zabbix-server-pgsql-7.0.14
 #### timescaledb: 2.19
 
+[time-scale-support-version](https://www.tigerdata.com/docs/self-hosted/latest/upgrades/upgrade-pg)
+
 ## install glibc-lanpack-en
 ```sh
 dnf install glibc-langpack-en net-tools python3-dnf-plugin-versionlock
@@ -38,7 +40,8 @@ sudo systemctl enable postgresql-17 --now
 excludepkgs=zabbix*
 
 
-rpm -Uvh https://repo.zabbix.com/zabbix/7.0/alma/9/x86_64/zabbix-release-latest-7.0.el9.noarch.rpm
+rpm -Uvh https://repo.zabbix.com/zabbix/7.0/rocky/9/x86_64/zabbix-release-latest-7.0.el9.noarch.rpm
+
 dnf clean all
 
 
@@ -90,7 +93,7 @@ DBPassword=123456
 # change nginx config
 vim /etc/nginx/conf.d/zabbix.conf
 ------
-listen 8080;
+listen 80;
 server_name 192.168.85.28;
 
 -----
@@ -135,6 +138,8 @@ dnf list timescaledb-tools --showduplicates
 
 dnf install timescaledb-2-postgresql-17-2.19.3 timescaledb-2-loader-postgresql-17-2.19.3 timescaledb-tools-0.17.0
 
+
+
 sudo dnf versionlock add timescaledb-2-postgresql-17 
 sudo dnf versionlock timescaledb-2-loader-postgresql-17 
 sudo dnf versionlock timescaledb-tools 
@@ -168,13 +173,10 @@ CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;
 # Patch Zabbix database
 \i /usr/share/zabbix-sql-scripts/postgresql/timescaledb/schema.sql
 exit
+exit
 
 
 sudo systemctl start zabbix-server
-
-
-
-
 
 
 ```
