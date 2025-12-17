@@ -317,10 +317,9 @@ zabbix:x:997:995:Zabbix Monitoring System:/var/lib/zabbix:/sbin/nologin
 usermod -d /var/lib/zabbix zabbix
 
 
-
-
-
+# the last step is to add the address in zabbix like below image
 ```
+![img](img/3-d.png)
 
 
 
