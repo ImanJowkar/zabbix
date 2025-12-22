@@ -68,3 +68,13 @@ TLSPSKFile=/etc/zabbix/secret.psk
 
 
 ```
+
+
+
+## Proxy configuration tuning
+```sh
+
+
+
+
+```
