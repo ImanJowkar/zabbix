@@ -34,11 +34,36 @@ expose_php = Off
 -----
 systemctl restart php-fpm
 
+```
+
+# inspect zabbix db
+
+```sh
+
+su - postgres
+psql
+\l 
+\c zabbix;
+\dt
+
+\dt history*
+\dt trends*
+
+select hypertable_schema, hypertable_name FROM timescaledb_information.hypertables;
 
 
 
+select * from history limit 10;
 
+```
 
+![img](img/1.png)
+![img](img/trends.png)
+
+```sql
+
+select i.name,h.* from items i, history h where h.itemid=i.itemid limit 10;
+select i.name, i.key_, h.* from items i, history h where h.itemid=i.itemid limit 100;
 
 
 ```
