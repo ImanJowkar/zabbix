@@ -12,6 +12,10 @@ dnf install glibc-langpack-en
 
 
 
+
+
+
+
 # security
 ```sh
 
@@ -22,8 +26,6 @@ server_tokens       off;
 -----
 
 nginx -s reload
-
-
 
 
 
@@ -65,5 +67,68 @@ select * from history limit 10;
 select i.name,h.* from items i, history h where h.itemid=i.itemid limit 10;
 select i.name, i.key_, h.* from items i, history h where h.itemid=i.itemid limit 100;
 
+```
+##  reset zabbix password for mariadb
+```sh
+
+htpasswd -bnBC 10 "" YourNewPassword | tr -d ':'
+# copy the output
+
+update users set passwd='<copied output>' where alias='Admin';          # zabbix 5
+update users set passwd='<copied output>' where username='Admin';       # zabbix 6, 7
+
+UPDATE users SET passwd = '$2a$10$ZXIvHAEP2ZM.dLXTm6uPHOMVlARXX7cqjbhM6Fn0cANzkCQBWpMrS' WHERE username = 'Admin';
 
 ```
+
+
+
+## reset zabbix password in postgresql database
+
+```sh
+
+iman@node:~$ echo -n 'newsecurepassword' | md5sum
+67bc4a4d0c80c103946d42acc3b2be1b  -
+
+psql
+\c zabbix;
+
+zabbix=# UPDATE users SET passwd='5be9a68073f66a56554e25614e9f1c9a' WHERE username='iman';
+UPDATE 1
+
+
+```
+
+
+### you can change the login type in database 
+```sh
+mariadb -u root -p
+show databases;
+use zabbix;
+
+select authentication_type from config;
+
+        0: Internal
+        1: LDAP
+
+update config set authentication_type=1;
+select authentication_type from config;
+
+
+```
+
+
+
+
+
+
+# useful command
+
+```sh
+
+find / -size +10M
+sed -i 's/find/pattern/g' /etc/zabbix/zabbix.conf
+
+sudo -H -u zabbix bash -c 'tail -f /var/log/nginx/access.log'
+```
+

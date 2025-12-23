@@ -111,7 +111,7 @@ chmod 644 /etc/zabbix/web/zabbix.conf.php
 ### install ntop on debain 12
 [ref](https://green.cloud/docs/how-to-install-ntopng-on-debian-12/)
 
-```
+```sh
 
 apt update && apt install software-properties-common wget
 
