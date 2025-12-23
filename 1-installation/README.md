@@ -114,6 +114,10 @@ zabbix=# UPDATE users SET passwd='5be9a68073f66a56554e25614e9f1c9a' WHERE userna
 UPDATE 1
 
 
+select userid, sessionid, status, lastaccess from sessions;
+DELETE FROM sessions WHERE userid = 3;
+
+
 ```
 
 
