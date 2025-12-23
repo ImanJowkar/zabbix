@@ -12,7 +12,18 @@ dnf install glibc-langpack-en
 
 
 
+## run command with zabbix user
+```sh
 
+sudo -u zabbix systemctl status nginx
+sudo -u zabbix ssh-keygen
+sudo -u zabbix ssh user@10.10.10.1
+sudo -u zabbix ls -lah
+
+
+
+
+```
 
 
 
