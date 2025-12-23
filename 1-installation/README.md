@@ -81,6 +81,11 @@ select i.name, i.key_, h.* from items i, history h where h.itemid=i.itemid limit
 ```
 ##  reset zabbix password for mariadb
 ```sh
+# for installing htpasswd
+sudo dnf install httpd-tools -y
+sudo apt install apache2-utils -y
+
+
 
 htpasswd -bnBC 10 "" YourNewPassword | tr -d ':'
 # copy the output
@@ -98,12 +103,13 @@ UPDATE users SET passwd = '$2a$10$ZXIvHAEP2ZM.dLXTm6uPHOMVlARXX7cqjbhM6Fn0cANzkC
 
 ```sh
 
-iman@node:~$ echo -n 'newsecurepassword' | md5sum
-67bc4a4d0c80c103946d42acc3b2be1b  -
+
+htpasswd -bnBC 10 "" newpasswd | tr -d ':\n'
 
 psql
 \c zabbix;
 
+zabbix=# SELECT username, name, passwd from users;
 zabbix=# UPDATE users SET passwd='5be9a68073f66a56554e25614e9f1c9a' WHERE username='iman';
 UPDATE 1
 
