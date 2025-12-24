@@ -153,3 +153,60 @@ sed -i 's/find/pattern/g' /etc/zabbix/zabbix.conf
 sudo -H -u zabbix bash -c 'tail -f /var/log/nginx/access.log'
 ```
 
+
+## Zabbix GET
+
+```sh
+dnf install zabbix-get
+apt install zabbix-get
+
+
+zabbix_get -s 192.168.85.70 -k agent.ping
+zabbix_get -s 192.168.85.70 -k system.uptime
+zabbix_get -s 192.168.85.70 -k agent.version
+zabbix_get -s 192.168.85.70 -k vfs.dir.get[/iman] | jq
+zabbix_get -s 192.168.85.70 -k vfs.file.contents[/etc/passwd]
+zabbix_get -s 192.168.85.70 -k system.sw.packages[nginx]
+
+
+zabbix_get -s 192.168.85.70 -k system.cpu.load[,avg1]
+zabbix_get -s 192.168.85.70 -k system.cpu.load[,avg5]
+zabbix_get -s 192.168.85.70 -k system.cpu.load[,avg15]
+
+
+zabbix_get -s 192.168.85.70 -k system.cpu.num
+nproc
+
+
+
+zabbix_get -s 192.168.85.70 -k system.cpu.util[0,idle,avg15] # only show for cpu 1
+zabbix_get -s 192.168.85.70 -k system.cpu.util[,idle,avg15]  # for all cpus
+
+
+
+
+
+
+
+
+
+
+
+
+```
+
+
+
+## simulate load on linux
+
+```sh
+
+dnf install epel-release
+dnf install stress
+
+stress --cpu 4 --timeout 60   # 4 CPU workers for 60 seconds
+
+# load on the system without installing any extra package
+yes > /dev/null
+
+```
