@@ -247,18 +247,58 @@ zabbix_get -s 192.168.85.71 -k chronyd.status
 ## UserParameter
 
 ```sh
+mkdir /var/lib/zabbix
+chown -R zabbix: /var/lib/zabbix/
+
+vim /var/lib/zabbix/checkssl.sh
+-------
+data=`echo | openssl s_client -servername $1 -connect $1:${2:-443} 2>/dev/null | openssl x509 -in /dev/stdin -noout -enddate | sed -e 's#notAfter=##'`
+
+ssldate=`date -d "${data}" '+%s'`
+
+nowdate=`date '+%s'`
+
+diff="$((${ssldate}-${nowdate}))"
+
+echo $((${diff}/86400))
+-------
+chown -R zabbix: /var/lib/zabbix/
+
+
+
+
+
+
+
 vim /etc/zabbix/zabbix_agent2.d/userparm.conf
 -------
 UserParameter=svc_status,systemctl status chronyd
+
+UserParameter=ssl_check.status[*],/var/lib/zabbix/checkssl.sh $1 $2
+
+UserParameter=disk.usage[*],df -P $1 | tail -1 | awk '{print $5}' | tr -d '%'
+
+UserParameter=service.status[*],systemctl is-active $1 2>/dev/null | grep -c active
+
 -------
 systemctl restart zabbix-agent2
 # or
 zabbix_agent2 -R userparameter_reload
+zabbix_agent2 -R metrics
+
 
 
 zabbix_get -s 192.168.85.71 -k svc_status
-zabbix_agent2 -R metrics
 
+
+zabbix_get -s 192.168.85.71 -k ssl_check.status['faradars.org',443]
+zabbix_get -s 192.168.85.71 -k ssl_check.status['google.com',443]
+zabbix_get -s 192.168.85.71 -k ssl_check.status['yahoo.com',443]
+
+
+zabbix_get -s 192.168.85.71 -k disk.usage[/var]
+
+zabbix_get -s 192.168.85.71 -k service.status[nginx]
 
 
 
