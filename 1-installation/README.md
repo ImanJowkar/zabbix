@@ -242,3 +242,24 @@ systemctl restart zabbix-agent
 
 zabbix_get -s 192.168.85.71 -k chronyd.status
 ```
+
+
+## UserParameter
+
+```sh
+vim /etc/zabbix/zabbix_agent2.d/userparm.conf
+-------
+UserParameter=svc_status,systemctl status chronyd
+-------
+systemctl restart zabbix-agent2
+# or
+zabbix_agent2 -R userparameter_reload
+
+
+zabbix_get -s 192.168.85.71 -k svc_status
+zabbix_agent2 -R metrics
+
+
+
+
+```
