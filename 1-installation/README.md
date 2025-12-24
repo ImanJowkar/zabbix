@@ -154,7 +154,7 @@ sudo -H -u zabbix bash -c 'tail -f /var/log/nginx/access.log'
 ```
 
 
-## Zabbix GET
+# Zabbix GET
 
 ```sh
 dnf install zabbix-get
@@ -184,15 +184,6 @@ zabbix_get -s 192.168.85.70 -k system.cpu.util[,idle,avg15]  # for all cpus
 
 
 
-
-
-
-
-
-
-
-
-
 ```
 
 
@@ -209,4 +200,45 @@ stress --cpu 4 --timeout 60   # 4 CPU workers for 60 seconds
 # load on the system without installing any extra package
 yes > /dev/null
 
+```
+
+
+# system.run[]
+
+```sh
+vim /etc/zabbix/zabbix_agent.conf
+------
+AllowKey=system.run[/app/zbx-script/bash.sh]
+AllowKey=system.run[systemctl status *]
+
+
+------
+systemctl restart zabbix-agent
+
+
+
+zabbix_get -s 192.168.85.70 -k system.run['/app/zbx-script/bash.sh']
+zabbix_get -s 192.168.85.70 -k system.run['systemctl status nginx']
+zabbix_get -s 192.168.85.70 -k system.run['systemctl status httpd']
+
+
+
+
+
+```
+
+# Alias
+
+```sh
+
+vim /etc/zabbix/zabbix_agnet.conf
+----
+Alias=chronyd.status:system.run[systemctl status chronyd]
+----
+
+systemctl restart zabbix-agent
+
+
+
+zabbix_get -s 192.168.85.71 -k chronyd.status
 ```
