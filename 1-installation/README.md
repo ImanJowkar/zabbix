@@ -321,4 +321,21 @@ echo $? # if 0 port open, if 1 port closed
 snmpwalk -v 2c -c iman 10.10.10.1:161
 
 
+# monitor cisco device
+# read-only
+snmp-server community iman ro
+
+# if you want to restrict the ip
+ip access-list standard snmp-acl
+permit 192.168.85.170
+exit
+snmp-server community iman ro snmp-acl
+
+# you can define multiple community-string , one of them is readonly and another is read-write
+snmp-server community iman-readonly ro
+snmp-server community iman-readwrite rw
+
+
+
+
 ```
