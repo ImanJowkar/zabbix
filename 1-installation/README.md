@@ -303,3 +303,22 @@ zabbix_get -s 192.168.85.71 -k service.status[nginx]
 
 
 ```
+
+
+## SNMP
+[mib-browser-site](https://mibbrowser.online/mibdb_search.php)
+```sh
+# you can install snmp-walk for testing and getting your snmp OID information from devices
+
+dnf install net-snmp-libs net-snmp-utils
+
+dnf install nmap
+
+# check udp port
+nc -uz 10.10.10.1 161
+echo $? # if 0 port open, if 1 port closed
+
+snmpwalk -v 2c -c iman 10.10.10.1:161
+
+
+```
