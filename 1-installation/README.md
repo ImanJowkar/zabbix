@@ -347,3 +347,69 @@ snmp-server community iman-readwrite rw
 
 
 ```
+
+
+## External Checks (simple with out parameter)
+
+```sh
+
+vim /etc/zabbix/zabbix_server.conf
+----
+ExternalScripts=/usr/lib/zabbix/externalscripts
+----
+
+vim /usr/lib/zabbix/externalscripts/app.sh
+----
+#!/bin/bash
+echo the current time is : `date`
+----
+chown zabbix: app.sh
+
+sudo -H -u zabbix bash -c 'tail -f /var/log/nginx/access.log'
+sudo -u zabbix bash app.sh
+
+
+```
+![ext](img/external.png)
+![ext2](img/external2.png)
+
+## External Checks ( with parameter)
+
+```sh
+
+vim /etc/zabbix/zabbix_server.conf
+----
+ExternalScripts=/usr/lib/zabbix/externalscripts
+----
+
+vim /usr/lib/zabbix/externalscripts/send-hello.sh
+----
+#!/bin/bash
+echo hello ${1:-"saman"} and you age is ${2:-20}
+----
+chown zabbix: send-hello.sh
+
+sudo -H -u zabbix bash -c 'tail -f /var/log/nginx/access.log'
+sudo -u zabbix bash send-hello.sh
+
+
+```
+![ext3](img/ext3.png)
+![ext4](img/ext4.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

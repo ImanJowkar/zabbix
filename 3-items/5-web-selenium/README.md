@@ -2,9 +2,6 @@
 [ref](https://www.zabbix.com/documentation/current/en/manual/guides/monitor_browser)
 ```sh
 
-docker run --name browser  -p 4444:4444  -p 7900:7900  --shm-size="2g" -d hub.hamdocker.ir/selenium/standalone-chrome:latest
-
-
 docker run --name browser  -p 4444:4444  -p 7900:7900  --shm-size="2g" -d hub.hamdocker.ir/selenium/standalone-chrome:143.0-20251212
 
 ```
