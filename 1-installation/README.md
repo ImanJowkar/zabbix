@@ -244,7 +244,7 @@ zabbix_get -s 192.168.85.71 -k chronyd.status
 ```
 
 
-## UserParameter
+# UserParameter
 
 ```sh
 mkdir /var/lib/zabbix
@@ -305,7 +305,7 @@ zabbix_get -s 192.168.85.71 -k service.status[nginx]
 ```
 
 
-## SNMP
+# SNMP
 [mib-browser-site](https://mibbrowser.online/mibdb_search.php)
 ```sh
 # you can install snmp-walk for testing and getting your snmp OID information from devices
@@ -341,15 +341,8 @@ snmp-server community iman-readwrite rw
 ```
 
 
-### http agent
-```sh
 
-
-
-```
-
-
-## External Checks (simple with out parameter)
+# External Checks (simple with out parameter)
 
 ```sh
 
@@ -373,7 +366,7 @@ sudo -u zabbix bash app.sh
 ![ext](img/external.png)
 ![ext2](img/external2.png)
 
-## External Checks ( with parameter)
+# External Checks ( with parameter)
 
 ```sh
 
@@ -398,16 +391,60 @@ sudo -u zabbix bash send-hello.sh
 ![ext4](img/ext4.png)
 
 
+# convert counter to gauge with preprocessing
+```sh
+# first create a external script for simulating the counter
+
+vim /usr/lib/zabbix/externalscripts/counter.sh
+------
+#!/bin/bash
+
+COUNTER_FILE="/usr/lib/zabbix/externalscripts/zabbix_counter.value"
+
+# Random increment range
+MIN_INC=1
+MAX_INC=10
+
+# Initialize counter if missing
+if [ ! -f "$COUNTER_FILE" ]; then
+    echo 0 > "$COUNTER_FILE"
+fi
+
+# Read current value
+value=$(cat "$COUNTER_FILE")
+
+# Generate random increment
+increment=$(( RANDOM % (MAX_INC - MIN_INC + 1) + MIN_INC ))
+
+# Increase counter
+value=$((value + increment))
+
+# Save new value
+echo "$value" > "$COUNTER_FILE"
+
+# Output counter for Zabbix
+echo "$value"
+------
+touch /usr/lib/zabbix/externalscripts/zabbix_counter.value
+
+chown zabbix: /usr/lib/zabbix/externalscripts/zabbix_counter.value
+chown zabbix: /usr/lib/zabbix/externalscripts/counter.sh
+chmod u+x /usr/lib/zabbix/externalscripts/counter.sh
 
 
 
 
+```
+![ext5](img/ext5.png)
+
+![ext6](img/ext6.png)
+![ext7](img/ext7.png)
 
 
+---------------------------------------------------
 
-
-
-
+![ext8](img/ext8.png)
+![ext9](img/ext9.png)
 
 
 
