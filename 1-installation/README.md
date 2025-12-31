@@ -446,7 +446,33 @@ chmod u+x /usr/lib/zabbix/externalscripts/counter.sh
 ![ext8](img/ext8.png)
 ![ext9](img/ext9.png)
 
+![ext10](img/ext10.png)
+
+
+# Discovery and discovery action
+
+![ext11](img/ext11.png)
+![ext12](img/ext12.png)
+![ext13](img/ext13.png)
+
+now create discovery action
+![ext14](img/ext14.png)
+
+![ext15](img/ext15.png)
+
+![ext16](img/ext16.png)
+
+
+## zbx-proxy-configuration and tunning
+```sh
+vim /etc/mysql/mariadb.conf.d/50-server.cnf
+-----
+innodb_buffer_pool_size = 8G
+-----
 
 
 
 
+
+
+```
