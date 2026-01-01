@@ -199,6 +199,16 @@ systemctl enable zabbix-server zabbix-agent2 nginx php-fpm --now
 
 
 
+# zabbix -server basic optimization
+
+vim /etc/zabbix/zabbix_server.conf
+-----
+# disable software check update
+AllowSoftwareUpdateCheck=0
+
+-----
+
+systemctl restart zabbix-server
 
 
 ```

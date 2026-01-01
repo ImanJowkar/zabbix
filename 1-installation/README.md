@@ -472,6 +472,20 @@ innodb_buffer_pool_size = 8G
 
 
 
+vim /etc/zabbix/zabbix_proxy.conf
+------
+ProxyLocalBuffer=24  # keeps data for 1 day # Proxy will keep data locally for N hours, even if the data have already been synced with the server. 
+
+ProxyOfflineBuffer=240 # Proxy will keep data for N hours in case if no connectivity with Zabbix Server.
+
+ProxyBufferMode=hybrid
+ProxyMemoryBufferSize=2G
+
+ProxyConfigFrequency=10
+DataSenderFrequency=1
+
+------
+
 
 
 
