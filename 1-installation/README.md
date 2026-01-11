@@ -486,7 +486,47 @@ DataSenderFrequency=1
 
 ------
 
+```
 
+## zabbix server tunning
+```sh
+
+vim /etc/php-fpm.d/zabbix.conf
+-----
+# always use nginx instead of httpd(apach2)
+# I recommend increse it to 1G
+php_value[memory_limit] = 1G
+-----
+systemctl restart php-fpm.service
+
+# always use ssd instead of HDD
+
+
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+## connect zabbix to elastic-search
+```sh
+
+docker pull hub.hamdocker.ir/elastic/elasticsearch:9.2.3
+
+sudo sysctl -w vm.max_map_count=262144
+
+
+docker run --name es01 -p 9200:9200 -it -m 2GB hub.hamdocker.ir/elasticsearch/elasticsearch:9.2.3
 
 
 ```
