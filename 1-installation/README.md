@@ -502,11 +502,11 @@ systemctl restart php-fpm.service
 # always use ssd instead of HDD
 
 
-
-
+## change the audit-log Data storage period
 
 ```
 
+![alt text](img/ext17.png)
 
 
 
@@ -517,8 +517,7 @@ systemctl restart php-fpm.service
 
 
 
-
-## connect zabbix to elastic-search
+## 
 ```sh
 
 docker pull hub.hamdocker.ir/elastic/elasticsearch:9.2.3
