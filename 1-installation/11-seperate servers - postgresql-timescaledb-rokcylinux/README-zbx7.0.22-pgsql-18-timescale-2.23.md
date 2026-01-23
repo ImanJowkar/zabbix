@@ -78,6 +78,7 @@ dnf install -y zabbix-selinux-policy-7.0.22
 
 
 
+
 dnf list zabbix-agent2-plugin-mongodb --showduplicates
 dnf install -y zabbix-agent2-plugin-mongodb-7.0.22
 dnf install -y zabbix-agent2-plugin-mssql-7.0.22
@@ -114,8 +115,6 @@ systemctl restart postgresql-18.service
 # zbx-srv: 192.168.85.100
 
 ```sh
-
-
 
 dnf install glibc-langpack-en net-tools python3-dnf-plugin-versionlock -y
 
@@ -283,14 +282,8 @@ exit
 exit
 
 
-
 # back to zabbix server and Start the zabbix server
 sudo systemctl start zabbix-server
-
-
-
-
-
 
 ```
 

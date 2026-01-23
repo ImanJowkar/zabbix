@@ -36,10 +36,9 @@ apt install zabbix-server-mysql  zabbix-agent
 
 
 ## zbx-web
-```
+```sh
 
 apt install  zabbix-frontend-php zabbix-nginx-conf
-
 
 sudo vim /etc/zabbix/nginx.conf
 ---------------------------
@@ -54,7 +53,7 @@ sudo nginx -s reload
 
 ## zbx-db
 [ref](https://www.digitalocean.com/community/tutorials/how-to-install-mariadb-on-ubuntu-22-04)
-```
+```sh
 apt install zabbix-sql-scripts
 
 
@@ -112,7 +111,7 @@ select * from ha_node;
 
 ## zbx-srv1
 
-```
+```sh
 vim /etc/zabbix/zabbix_server.conf
 --------------
 DBHost=192.168.229.173
@@ -133,7 +132,7 @@ systemctl restart zabbix-server.service
 
 ## zbx-srv2
 
-```
+```sh
 vim /etc/zabbix/zabbix_server.conf
 --------------
 DBHost=192.168.229.173
