@@ -529,3 +529,32 @@ docker run --name es01 -p 9200:9200 -it -m 2GB hub.hamdocker.ir/elasticsearch/el
 
 
 ```
+
+
+# zabbix server and proxy configuration
+```sh
+
+
+vim /etc/zabbix/zabbix_server.conf
+------
+HousekeepingFrequency=1
+MaxHouseKeeperDelete=10000
+
+
+CacheSize=2G  # Rule: ~8–10% of RAM
+HistoryCacheSize=1G
+HistoryIndexCacheSize=512M
+TrendCacheSize=512M
+ValueCacheSize=2G  # Big impact on frontend speed
+StartDBSyncers=4
+
+
+------
+
+zabbix_server -R housekeeper_execute   # manually execute housekeeping
+
+
+
+
+
+```

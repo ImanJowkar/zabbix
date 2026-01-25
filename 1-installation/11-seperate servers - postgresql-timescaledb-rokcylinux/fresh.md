@@ -203,3 +203,45 @@ systemctl restart mariadb
 
 
 ```
+
+
+
+
+
+# zabbix server and proxy configuration
+```sh
+
+
+vim /etc/zabbix/zabbix_server.conf
+------
+HousekeepingFrequency=1
+MaxHouseKeeperDelete=10000
+
+
+CacheSize=2G  # Rule: ~8–10% of RAM
+HistoryCacheSize=1G
+HistoryIndexCacheSize=512M
+TrendCacheSize=512M
+ValueCacheSize=2G  # Big impact on frontend speed
+StartDBSyncers=4
+
+
+------
+
+zabbix_server -R housekeeper_execute   # manually execute housekeeping
+
+
+vim /etc/zabbix/zabbix_proxy.conf
+-------
+ProxyMode=0   # active mode
+ProxyLocalBuffer=24 # how many hours proxy keep data locally, even if the data have already been synced with the server
+ProxyOfflineBuffer=72 # proxy will keep data for N hours in case if no connectivity with zabbix server.
+CacheSize=2G   # Rule: 5–10% of proxy RAM
+
+HistoryCacheSize=1G # Buffers history before DB write
+HistoryIndexCacheSize=1G
+
+
+-------
+
+```
