@@ -225,6 +225,9 @@ TrendCacheSize=512M
 ValueCacheSize=2G  # Big impact on frontend speed
 StartDBSyncers=4
 
+AllowSoftwareUpdateCheck=0  # disable software update checks
+
+
 
 ------
 
@@ -235,11 +238,16 @@ vim /etc/zabbix/zabbix_proxy.conf
 -------
 ProxyMode=0   # active mode
 ProxyLocalBuffer=24 # how many hours proxy keep data locally, even if the data have already been synced with the server
-ProxyOfflineBuffer=72 # proxy will keep data for N hours in case if no connectivity with zabbix server.
+ProxyOfflineBuffer=240 # proxy will keep data for N hours in case if no connectivity with zabbix server.
 CacheSize=2G   # Rule: 5–10% of proxy RAM
-
 HistoryCacheSize=1G # Buffers history before DB write
 HistoryIndexCacheSize=1G
+ProxyBufferMode=hybrid
+ProxyMemoryBufferSize=512M
+ProxyConfigFrequency=10
+
+StartPollers=20
+
 
 
 -------
