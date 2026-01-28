@@ -58,3 +58,81 @@ NodeAddress=192.168.85.92:10051
 
 
 ```
+
+# web1
+```sh
+dnf install -y keepalived
+
+
+
+vim /etc/keepalived/keepalived.conf
+-----
+vrrp_track_process chk_nginx {
+      process nginx
+      weight 10
+}
+vrrp_instance ZBX_1 {
+        state BACKUP
+        interface ens160
+        virtual_router_id 51
+        priority 243
+        advert_int 1
+        authentication {
+                auth_type PASS
+                auth_pass password
+        }
+        track_process {
+                chk_nginx
+        }
+        virtual_ipaddress {
+                192.168.85.100/24
+        }
+}
+
+
+-----
+
+
+
+
+firewall-cmd --zone=drop --add-protocol=vrrp --permanent
+firewall-cmd --reload
+
+
+```
+
+
+# web2
+```sh
+dnf install -y keepalived
+
+
+vim /etc/keepalived/keepalived.conf
+-----
+vrrp_track_process chk_nginx {
+      process nginx
+      weight 10
+}
+vrrp_instance ZBX_1 {
+        state MASTER
+        interface ens160
+        virtual_router_id 51
+        priority 244
+        advert_int 1
+        authentication {
+                auth_type PASS
+                auth_pass password
+        }
+        track_process {
+                chk_nginx
+        }
+        virtual_ipaddress {
+                192.168.85.100/24
+        }
+}
+-----
+
+
+firewall-cmd --zone=drop --add-protocol=vrrp --permanent
+firewall-cmd --reload
+```
