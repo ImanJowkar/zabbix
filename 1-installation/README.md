@@ -558,3 +558,48 @@ zabbix_server -R housekeeper_execute   # manually execute housekeeping
 
 
 ```
+
+
+### enable https for zabbix ui with valid certificate
+
+```sh
+
+server {
+    listen 80;
+    server_name bia2bagh.ir www.bia2bagh.ir;
+    return 301 https://bia2bagh$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    ssl_certificate /etc/letsencrypt/live/bia2bagh.ir/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/bia2bagh.ir/privkey.pem;
+
+
+    server_name bia2bagh.ir www.bia2bagh.ir;   
+    root /var/www/bia2bagh.ir/public_html;   
+    index index.php;
+    location / {
+        try_files $uri $uri/ /index.php$is_args$args;
+    }
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/run/php/php8.3-fpm.sock;
+    }
+    access_log /var/log/nginx/access_bia2bash.log combined buffer=256k flush=60m;
+    error_log /var/log/nginx/error_bia2bash.log;
+}
+
+
+
+
+apt install certbot
+certbot certonly --manual --preferred-challenges=dns -d biatobagh.ir -d '*.bia2bagh.ir' --agree-tos
+
+# add the txt in your dns provider
+
+
+
+
+
+```
