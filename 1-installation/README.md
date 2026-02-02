@@ -567,7 +567,7 @@ zabbix_server -R housekeeper_execute   # manually execute housekeeping
 server {
     listen 80;
     server_name bia2bagh.ir www.bia2bagh.ir;
-    return 301 https://bia2bagh$request_uri;
+    return 301 https://bia2bagh.ir$request_uri;
 }
 
 server {
@@ -589,8 +589,6 @@ server {
     access_log /var/log/nginx/access_bia2bash.log combined buffer=256k flush=60m;
     error_log /var/log/nginx/error_bia2bash.log;
 }
-
-
 
 
 apt install certbot
