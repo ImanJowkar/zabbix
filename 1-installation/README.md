@@ -1,4 +1,4 @@
-![repository for download zabbix](https://repo.zabbix.com)
+[repository for download zabbix](https://repo.zabbix.com)
 
 
 # if you got `System locale` error install the folowing pakages:
@@ -21,9 +21,12 @@ sudo -u zabbix ssh user@10.10.10.1
 sudo -u zabbix ls -lah
 
 
-
-
 ```
+
+
+
+
+
 
 
 
@@ -596,6 +599,21 @@ certbot certonly --manual --preferred-challenges=dns -d biatobagh.ir -d '*.bia2b
 
 # add the txt in your dns provider
 
+
+
+
+
+```
+
+
+
+## Authenticate Zabbix user with Active Directory(ldap)
+
+domain: company.com
+OU: IT
+
+Distinguish Name(DN): dc=company,dc=com
+```sh
 
 
 

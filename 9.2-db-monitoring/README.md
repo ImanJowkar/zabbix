@@ -24,3 +24,18 @@ systemctl restart postgresql-17.service
 
 
 ```
+
+
+# monitor mysql/mariadb with zabbix
+[ref](https://www.zabbix.com/documentation/current/en/manual/guides/monitor_mysql)
+```sh
+mysql -u root -p 
+
+CREATE USER 'zbx_monitor'@'localhost' IDENTIFIED BY 'PsssssssMMMDDND';
+GRANT REPLICATION CLIENT,PROCESS,SHOW DATABASES,SHOW VIEW ON *.* TO 'zbx_monitor'@'localhost';
+quit;
+
+```
+![alt text](img/1.png)
+
+
