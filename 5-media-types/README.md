@@ -96,7 +96,7 @@ chown zabbix:zabbix /usr/lib/zabbix/alertscripts/matter-python.py
 
 ```
 
-
+![alt text](img/2.png)
 
 
 
