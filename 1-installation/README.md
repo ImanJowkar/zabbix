@@ -26,10 +26,6 @@ sudo -u zabbix ls -lah
 
 
 
-
-
-
-
 # security
 ```sh
 
@@ -613,6 +609,16 @@ domain: company.com
 OU: IT
 
 Distinguish Name(DN): dc=company,dc=com
+```sh
+
+
+
+
+```
+
+
+## chnage systemd unit file trigger time
+![alt text](img/ext18.png)
 ```sh
 
 
