@@ -285,7 +285,25 @@ exit
 # back to zabbix server and Start the zabbix server
 sudo systemctl start zabbix-server
 
+
+
+## When TimescaleDB is enabled for Zabbix, it creates hypertables (automatically partitioned tables) instead of regular PostgreSQL partitions
+
+
+\c zabbix
+
+# -- Check if specific tables are hypertables
+SELECT hypertable_name, owner, num_chunks 
+FROM timescaledb_information.hypertables
+WHERE hypertable_schema = 'public';
+
+
+
+
 ```
+
+
+
 
 
 # report manager
