@@ -1,6 +1,11 @@
 ## how to monitor esxi with zabbix
 
 
+
+
+
+
+
 ```sh
 
 # vim /etc/zabbix/zabbix_server.conf # or zabbix proxy

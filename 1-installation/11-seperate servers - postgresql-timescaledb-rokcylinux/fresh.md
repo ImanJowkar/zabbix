@@ -96,6 +96,21 @@ sudo systemctl restart postgresql-18.service
 
 
 
+# Create timescaledb extension
+sudo su - postgres
+psql  zabbix
+CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;
+\dx
+
+# Patch Zabbix database
+\i /usr/share/zabbix-sql-scripts/postgresql/timescaledb/schema.sql
+exit
+exit
+
+
+# back to zabbix server and Start the zabbix server
+sudo systemctl start zabbix-server
+
 
 
 
