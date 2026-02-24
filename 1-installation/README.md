@@ -46,6 +46,9 @@ expose_php = Off
 -----
 systemctl restart php-fpm
 
+
+
+
 ```
 
 # inspect zabbix db
@@ -533,7 +536,6 @@ docker run --name es01 -p 9200:9200 -it -m 2GB hub.hamdocker.ir/elasticsearch/el
 # zabbix server and proxy configuration
 ```sh
 
-
 vim /etc/zabbix/zabbix_server.conf
 ------
 HousekeepingFrequency=1
@@ -725,3 +727,19 @@ tail -f /var/log/audit/audit.log
 ![EMAIL - Generic SMTP](img/1-email-generic-smtp.png)
 
 ![Email - HTML](img/2-Email-html.png)
+
+
+## storage calculation in zabbix
+What really consumes disk in Zabbix
+
+Almost all storage is from:
+
+History tables (raw data)
+
+Trend tables (aggregated data)
+
+Events / problems / alerts (small, but grows)
+
+80–90% of your DB size = history* tables.
+
+
