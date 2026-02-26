@@ -64,7 +64,7 @@ sudo -H -u zabbix bash -c 'tail -f /var/log/nginx/access.log'
 
 
 # Backup and restore from mysql 
-```
+```sh
 # backup
 mysqldump --single-transaction  --no-tablespaces -u zabbix -p zabbix > zbx-backup.sql
 
@@ -85,7 +85,7 @@ set global log_bin_trust_function_creators = 0;
 
 # Backup configuration file.
 
-```
+```sh
 rsync -avP /etc/zabbix/ /zabbix-bak
 
 rsync -avP /etc/zabbix/* -e "ssh -p 22" root@10.10.56.20:/zbx-bak
