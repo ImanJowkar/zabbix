@@ -7,6 +7,7 @@ AllowKey=system.run[/app/zbx-script/bash.sh]
 AllowKey=system.run[systemctl status *]
 
 
+
 ------
 systemctl restart zabbix-agent
 

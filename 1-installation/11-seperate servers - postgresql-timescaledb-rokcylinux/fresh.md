@@ -143,7 +143,7 @@ sudo dnf install MariaDB-server MariaDB-client
 mariadb-secure-installation
 
 
-mariadb -uroot -p
+mariadb -uroot -p            
 CREATE DATABASE zabbix_proxy CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
 CREATE USER 'zbxproxy'@'localhost' IDENTIFIED BY 'StrongPassword';
 

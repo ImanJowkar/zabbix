@@ -12,12 +12,13 @@ chown zabbix: secret.psk
 
 
 # add below config to you zabbix_proxy.conf or zabbix_agent.conf
-
+vim /etc/zabbix/zabbix_agentd.conf
+-----
 TLSConnect=psk
 TLSAccept=psk
 TLSPSKIdentity=proxy
 TLSPSKFile=/etc/zabbix/secret.psk
-
+------
 
 
 # next enable encryption in zabbix UI like below image

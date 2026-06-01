@@ -307,40 +307,6 @@ zabbix_get -s 192.168.85.71 -k service.status[nginx]
 ```
 
 
-# SNMP
-[mib-browser-site](https://mibbrowser.online/mibdb_search.php)
-```sh
-# you can install snmp-walk for testing and getting your snmp OID information from devices
-
-dnf install net-snmp-libs net-snmp-utils
-
-dnf install nmap
-
-# check udp port
-nc -uz 10.10.10.1 161
-echo $? # if 0 port open, if 1 port closed
-
-snmpwalk -v 2c -c iman 10.10.10.1:161
-
-
-# monitor cisco device
-# read-only
-snmp-server community iman ro
-
-# if you want to restrict the ip
-ip access-list standard snmp-acl
-permit 192.168.85.170
-exit
-snmp-server community iman ro snmp-acl
-
-# you can define multiple community-string , one of them is readonly and another is read-write
-snmp-server community iman-readonly ro
-snmp-server community iman-readwrite rw
-
-
-
-
-```
 
 
 
@@ -486,7 +452,8 @@ ProxyMemoryBufferSize=2G
 ProxyConfigFrequency=10
 DataSenderFrequency=1
 
-------
+CacheSize=512M
+
 
 ```
 
@@ -506,7 +473,20 @@ systemctl restart php-fpm.service
 
 ## change the audit-log Data storage period
 
+
+vim /etc/zabbix/zabbix_server.conf
+-----
+CacheSize=512M
+
+-----
+
+
+
+
+
+
 ```
+
 
 ![alt text](img/ext17.png)
 
@@ -619,7 +599,7 @@ Distinguish Name(DN): dc=company,dc=com
 ```
 
 
-## chnage systemd unit file trigger time
+## change systemd unit file trigger time
 ![alt text](img/ext18.png)
 ```sh
 
@@ -627,11 +607,32 @@ Distinguish Name(DN): dc=company,dc=com
 
 
 ```
+## json path functions query
+```sh
+
+$.[?(@.age == 20)].name
+$.[?(@.shop_name== 'digikala' && @.product_name=="Smartphone")].total.first()
+$.[?(@.shop_name == '{#SHOP_NAME}' && @.product_name == '{#PRODUCT_NAME}')].total.first()
+
+
+ 
+total[{#PRODUCT_NAME}-{#SHOP_NAME}]
+
+```
+![jsonpath example](img/json-path-example.png)
+
+![json-path-1](img/jsonpath-1.png)
+
+![alt text](img/jsonpath-2.png)
+
+![alt text](img/javascript.png)
+
+![alt text](img/avg.png)
 
 
 
 # report manager
-# zbx-srv - 85.100
+### zbx-srv - 85.100
 ```sh
 
 # on the zabbix server
@@ -729,17 +730,11 @@ tail -f /var/log/audit/audit.log
 ![Email - HTML](img/2-Email-html.png)
 
 
-## storage calculation in zabbix
-What really consumes disk in Zabbix
-
-Almost all storage is from:
-
-History tables (raw data)
-
-Trend tables (aggregated data)
-
-Events / problems / alerts (small, but grows)
-
-80–90% of your DB size = history* tables.
+# Expression Macro on maps
+```sh
+Bit Recv: {?last(/Zabbix server/net.if.in["ens160"])}
+Bit Send: {?last(/Zabbix server/net.if.out["ens160"])}
 
 
+```
+![net-map1](img/netmap.png)

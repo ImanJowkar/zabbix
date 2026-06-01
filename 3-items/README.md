@@ -1,7 +1,7 @@
 # Items
 
 ### system.run[]
-```
+```sh
 mkdir /zabbix/files/zbx-script
 vim /zabbix/files/zbx-script/check-ssl.sh
 # add below
