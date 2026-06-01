@@ -738,3 +738,44 @@ Bit Send: {?last(/Zabbix server/net.if.out["ens160"])}
 
 ```
 ![net-map1](img/netmap.png)
+
+
+## Backup and restore zbx db when timescaaledb extention is enable
+
+```sh
+
+----------------------
+# get backup
+sudo -u postgres pg_dump -Fc -f /backup/zabbix_$(date +%F).dump zabbix
+# ignore warnings
+
+
+# verify backup
+sudo -u postgres pg_restore -l /backup/zabbix_*.dump | head
+
+
+scp /backup/zabbix_2026-06-01.dump root@NEW_SERVER:/backup/
+
+
+systemctl stop zabbix-server
+
+
+sudo -u postgres createuser --pwprompt zabbix
+sudo -u postgres createdb -O zabbix zabbix
+
+
+sudo -u postgres psql -d zabbix -c "CREATE EXTENSION IF NOT EXISTS timescaledb;"
+
+sudo -u postgres psql -d zabbix -c "SELECT timescaledb_pre_restore();"
+
+
+sudo -u postgres pg_restore --no-owner -d zabbix /backup/zabbix_2026-06-01.dump
+
+	
+sudo -u postgres psql -d zabbix -c "SELECT timescaledb_post_restore();"
+
+
+
+
+
+```
