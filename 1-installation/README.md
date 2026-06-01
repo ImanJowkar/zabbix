@@ -774,8 +774,24 @@ sudo -u postgres pg_restore --no-owner -d zabbix /backup/zabbix_2026-06-01.dump
 	
 sudo -u postgres psql -d zabbix -c "SELECT timescaledb_post_restore();"
 
+sudo -u postgres psql -d zabbix
+
+ALTER FUNCTION public.zbx_ts_unix_now() OWNER TO zabbix;
 
 
+ALTER TABLE history OWNER TO zabbix;
+ALTER TABLE history_uint OWNER TO zabbix;
+ALTER TABLE history_str OWNER TO zabbix;
+ALTER TABLE history_text OWNER TO zabbix;
+ALTER TABLE history_log OWNER TO zabbix;
+ALTER TABLE history_bin OWNER TO zabbix;
+ALTER TABLE trends OWNER TO zabbix;
+ALTER TABLE trends_uint OWNER TO zabbix;
+
+ALTER SCHEMA public OWNER TO zabbix;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO zabbix;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO zabbix;
+GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO zabbix;
 
 
 ```
