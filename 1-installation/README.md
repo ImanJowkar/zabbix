@@ -703,7 +703,7 @@ usermod -d /var/lib/zabbix zabbix
 
 
 
-# Selinux configurations
+## Selinux configurations
 ```sh
 
 tail -f /var/log/audit/audit.log
@@ -730,7 +730,7 @@ tail -f /var/log/audit/audit.log
 ![Email - HTML](img/2-Email-html.png)
 
 
-# Expression Macro on maps
+## Expression Macro on maps
 ```sh
 Bit Recv: {?last(/Zabbix server/net.if.in["ens160"])}
 Bit Send: {?last(/Zabbix server/net.if.out["ens160"])}
@@ -794,4 +794,58 @@ GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO zabbix;
 GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO zabbix;
 
 
+
+# bolting table
+# In PostgreSQL, a bloated table means the table has extra unused space inside it.
+# PostgreSQL does not immediately remove old rows from disk when data is updated or deleted. Instead, old/deleted rows stay inside the table as “dead rows” until PostgreSQL cleans them.
+
+# vacuumdb is a PostgreSQL tool that cleans dead rows from tables.
+
+vacuumdb -d zabbix -z -v
+# -d zabbix   run on database named zabbix
+# -z          also run ANALYZE
+# -v          show detailed output
+
+
+
+# summery
+# Bloated table = table has too much dead/unused space
+
+# VACUUM = cleans dead rows and makes space reusable
+
+# ANALYZE = updates database statistics
+
+# vacuumdb -d zabbix -z -v = VACUUM + ANALYZE on zabbix database
+
+# Normal VACUUM is usually safe
+
+# VACUUM FULL needs maintenance window
+
+
+
 ```
+
+
+## SLA calculation on zabbix
+![alt text](img/sla.png)
+
+
+create host first and link template
+![alt text](img/sla2.png)
+
+
+then set tag on trigger
+![alt text](img/sla3.png)
+
+
+then create service
+![alt text](img/sla4.png)
+
+set tag for created server
+![alt text](img/sla5.png)
+
+then create SLA
+![alt text](img/sla7.png)
+
+you can see the the SLA report
+![alt text](img/sla8.png)
