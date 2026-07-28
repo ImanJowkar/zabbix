@@ -938,5 +938,40 @@ return JSON.stringify({
 });
 
 
+
+
 ```
 
+in the trigger action you can use custom msg
+
+![alt text](img/media2.png)
+
+Subject: Problem: {EVENT.NAME}
+Message: 
+🔴 مشکل جدید
+
+نام میزبان: {HOST.NAME}
+مشکل: {EVENT.NAME}
+شدت: {EVENT.SEVERITY}
+وضعیت: {EVENT.STATUS}
+
+مقدار فعلی:
+{ITEM.LASTVALUE1}
+
+زمان: {EVENT.DATE} {EVENT.TIME}
+شناسه رخداد: {EVENT.ID}
+
+
+![alt text](img/media3.png)
+Subject: 🟢 مشکل برطرف شد
+Message: 
+نام میزبان: {HOST.NAME}
+مشکل: {EVENT.NAME}
+شدت: {EVENT.SEVERITY}
+وضعیت: {EVENT.STATUS}
+
+مقدار فعلی:
+{ITEM.LASTVALUE1}
+
+زمان رفع: {EVENT.RECOVERY.DATE} {EVENT.RECOVERY.TIME}
+شناسه رخداد: {EVENT.ID}
