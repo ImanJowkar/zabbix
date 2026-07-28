@@ -849,3 +849,94 @@ then create SLA
 
 you can see the the SLA report
 ![alt text](img/sla8.png)
+
+
+# Connect Zabbix to Bale
+![media](img/media1.png)
+
+chat_id   {$CHAT_ID}
+message   {ALERT.MESSAGE}
+subject   {ALERT.SUBJECT}
+token     {$BALE_TOKEN}
+
+```js
+var params = JSON.parse(value);
+
+if (!params.token) {
+    throw 'Bale bot token is empty';
+}
+
+if (!params.chat_id) {
+    throw 'Bale chat_id is empty';
+}
+
+var request = new HttpRequest();
+
+request.addHeader('Content-Type: application/json');
+
+var url = 'https://tapi.bale.ai/bot' +
+    encodeURIComponent(params.token) +
+    '/sendMessage';
+
+var text = '';
+
+if (params.subject) {
+    text += params.subject + '\n\n';
+}
+
+if (params.message) {
+    text += params.message;
+}
+
+var payload = {
+    chat_id: params.chat_id,
+    text: text
+};
+
+Zabbix.log(
+    4,
+    '[Bale Webhook] Sending message to chat_id: ' + params.chat_id
+);
+
+var response = request.post(
+    url,
+    JSON.stringify(payload)
+);
+
+Zabbix.log(
+    4,
+    '[Bale Webhook] Response: ' + response
+);
+
+if (request.getStatus() < 200 || request.getStatus() >= 300) {
+    throw 'Bale API returned HTTP status ' +
+        request.getStatus() +
+        ': ' +
+        response;
+}
+
+var result;
+
+try {
+    result = JSON.parse(response);
+} catch (error) {
+    throw 'Invalid JSON response from Bale: ' + response;
+}
+
+if (!result.ok) {
+    throw 'Bale API error: ' +
+        (result.description || response);
+}
+
+return JSON.stringify({
+    tags: {
+        bale_message_id:
+            result.result && result.result.message_id
+                ? result.result.message_id
+                : ''
+    }
+});
+
+
+```
+
