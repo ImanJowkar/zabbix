@@ -855,8 +855,11 @@ you can see the the SLA report
 ![media](img/media1.png)
 
 chat_id   {$CHAT_ID}
+
 message   {ALERT.MESSAGE}
+
 subject   {ALERT.SUBJECT}
+
 token     {$BALE_TOKEN}
 
 ```js
