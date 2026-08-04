@@ -207,7 +207,7 @@ curl -i \
 ```sh
 # parameters
 audio=notification
-call_type=auto
+call_type=external
 destination={ALERT.SENDTO}
 token={$ISSABLE_APITOKEN}
 url=http://192.168.1.13:8090/call
