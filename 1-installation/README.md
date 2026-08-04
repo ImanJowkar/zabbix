@@ -949,6 +949,7 @@ in the trigger action you can use custom msg
 
 ![alt text](img/media2.png)
 
+
 Subject: Problem: {EVENT.NAME}
 Message: 
 🔴 مشکل جدید
@@ -966,6 +967,8 @@ Message:
 
 
 ![alt text](img/media3.png)
+
+
 Subject: 🟢 مشکل برطرف شد
 Message: 
 نام میزبان: {HOST.NAME}
@@ -978,3 +981,5 @@ Message:
 
 زمان رفع: {EVENT.RECOVERY.DATE} {EVENT.RECOVERY.TIME}
 شناسه رخداد: {EVENT.ID}
+
+
