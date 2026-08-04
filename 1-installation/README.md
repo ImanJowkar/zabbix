@@ -983,3 +983,128 @@ Message:
 شناسه رخداد: {EVENT.ID}
 
 
+
+
+# connect zabbix n8n bale(telegram) to each other
+```sh
+Create media type
+name: send-n8n
+Type: Webhook
+
+```
+params
+
+| Name                | Value                             |
+| ------------------- | --------------------------------- |
+| webhook_url         | `https://YOUR_N8N/webhook/zabbix` |
+| event_id            | `{EVENT.ID}`                      |
+| event_source        | `{EVENT.SOURCE}`                  |
+| event_value         | `{EVENT.VALUE}`                   |
+| trigger_id          | `{TRIGGER.ID}`                    |
+| trigger_name        | `{TRIGGER.NAME}`                  |
+| trigger_description | `{TRIGGER.DESCRIPTION}`           |
+| trigger_severity    | `{TRIGGER.SEVERITY}`              |
+| trigger_status      | `{TRIGGER.STATUS}`                |
+| host                | `{HOST.NAME}`                     |
+| host_name           | `{HOST.NAME}`                     |
+| host_ip             | `{HOST.IP}`                       |
+| event_opdata        | `{EVENT.OPDATA}`                  |
+| event_time          | `{EVENT.TIME}`                    |
+| event_date          | `{EVENT.DATE}`                    |
+| event_tags          | `{EVENT.TAGSJSON}`                |
+| alert_subject       | `{ALERT.SUBJECT}`                 |
+| alert_message       | `{ALERT.MESSAGE}`                 |
+| zabbix_url          | `https://your-zabbix.com`         |
+| event_recovery_id   | `{EVENT.RECOVERY.ID}`             |
+
+
+script: 
+
+```sh
+try {
+
+    var params = JSON.parse(value);
+
+    var payload = {
+        event_id: params.event_id,
+        event_source: params.event_source,
+        event_value: params.event_value,
+
+        trigger_id: params.trigger_id,
+        trigger_name: params.trigger_name,
+        trigger_description: params.trigger_description,
+        trigger_severity: params.trigger_severity,
+        trigger_status: params.trigger_status,
+
+        host: params.host,
+        host_name: params.host_name,
+        host_ip: params.host_ip,
+
+        opdata: params.event_opdata,
+
+        problem_id: params.event_id,
+        recovery_event_id: params.event_recovery_id,
+
+        time: params.event_time,
+        date: params.event_date,
+
+        tags: params.event_tags,
+
+        message: params.alert_message,
+        subject: params.alert_subject,
+
+        url: params.zabbix_url,
+
+        acknowledge_url:
+            params.zabbix_url +
+            "/tr_events.php?triggerid=" +
+            params.trigger_id +
+            "&eventid=" +
+            params.event_id
+    };
+
+    var req = new HttpRequest();
+
+    req.addHeader("Content-Type: application/json");
+
+    var response = req.post(params.webhook_url, JSON.stringify(payload));
+
+    Zabbix.log(4, response);
+
+    return "OK";
+
+}
+catch (error) {
+    Zabbix.log(3, error);
+    throw error;
+}
+
+```
+
+in set node in n8n add a feild called
+name: telegramMessage
+with below expression
+```sh
+{{ $json.body.event_value == "1" ? "🚨 INCIDENT DETECTED" : "✅ INCIDENT RESOLVED" }}
+
+━━━━━━━━━━━━━━━━━━
+
+🖥 Host: {{$json.body.host}}
+
+📌 Trigger:
+{{$json.body.trigger_name}}
+
+🔥 Severity: {{$json.body.trigger_severity}}
+
+📊 Details:
+{{$json.body.opdata}}
+
+🕒 {{$json.body.event_value == "1" ? "Started" : "Recovered"}}:
+{{$json.body.date}} {{$json.body.time}}
+
+🆔 Event ID:
+{{$json.body.event_id}}
+
+🔗 {{$json.body.acknowledge_url}}
+
+```
