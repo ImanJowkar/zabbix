@@ -1,0 +1,5 @@
+host,cpu_usage,memory_usage,disk_usage,active_connections,service_status
+web-01,34.5,61.2,48.0,12,1
+web-02,72.8,78.4,67.5,28,1
+db-01,88.1,91.3,82.2,143,0
+backup-01,18.9,44.7,73.1,6,1

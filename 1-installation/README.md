@@ -1108,3 +1108,72 @@ with below expression
 🔗 {{$json.body.acknowledge_url}}
 
 ```
+
+
+# read csv file with zabbix and python
+
+```sh
+
+sudo mkdir -p /opt/zabbix/scripts
+sudo mkdir -p /opt/zabbix/data
+
+
+sudo cp read_metrics.py /opt/zabbix/scripts/
+sudo cp zabbix_metrics_demo.csv /opt/zabbix/data/
+sudo cp zabbix_metrics_demo.xlsx /opt/zabbix/data/
+
+sudo chmod 755 /opt/zabbix/scripts/read_metrics.py
+sudo chmod 644 /opt/zabbix/data/zabbix_metrics_demo.*
+
+
+sudo -u zabbix /usr/bin/python3 /opt/zabbix/scripts/read_metrics.py csv /opt/zabbix/data/zabbix_metrics_demo.csv db-01 cpu_usage
+
+
+zabbix_get -s 127.0.0.1 -k 'demo.csv[db-01,cpu_usage]'
+
+
+
+# secure python script
+UserParameter=demo.csv[*],/usr/bin/python3 /opt/zabbix/scripts/read_metrics.py csv /opt/zabbix/data/zabbix_metrics_demo.csv "$1" "$2"
+
+UserParameter=demo.xlsx[*],/usr/bin/python3 /opt/zabbix/scripts/read_metrics.py xlsx /opt/zabbix/data/zabbix_metrics_demo.xlsx "$1" "$2"
+
+
+/usr/bin/python3 /opt/zabbix/scripts/read_metrics.py csv db-01 cpu_usage
+
+sudo -u zabbix /usr/bin/python3 /opt/zabbix/scripts/read_metrics.py csv db-01 cpu_usage
+
+
+/usr/bin/python3 /opt/zabbix/scripts/read_metrics.py csv 'db-01;whoami' cpu_usage
+echo $?
+
+
+/usr/bin/python3 /opt/zabbix/scripts/read_metrics.py csv db-01 password
+```
+
+
+# read xlsx with zabbix and python
+
+```sh
+pip3 install openpyxl
+
+
+
+zabbix_get -s 127.0.0.1 -k 'demo.xlsx[web-02,memory_usage]'
+
+```
+
+
+# interval in zabbix
+```sh
+min interval: 1s
+max interval: 24h
+
+interval
+custom interval ---> 
+                    1. flexible
+                    2. scheduling
+
+
+```
+
