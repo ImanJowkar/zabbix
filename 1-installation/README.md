@@ -1318,6 +1318,15 @@ in search filter
 
 ```
 
+### add media type automatic
+![alt text](img/76.png)
+
+![alt text](img/77.png)
+
+![alt text](img/78.png)
+
+![alt text](img/79.png)
+
 
 for Bind DN use distingush name of service account user, in our example we can get distingush name by
 ```sh
