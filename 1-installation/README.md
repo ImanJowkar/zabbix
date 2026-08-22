@@ -1177,3 +1177,103 @@ custom interval --->
 
 ```
 
+# Zabbix LDAP without JIT
+
+Create new OU, called ZbxServiceAccount
+
+![alt text](img/58.png)
+Create new user in this OU
+
+name: svc_zabbix_ldap
+![alt text](img/59.png)
+
+![alt text](img/60.png)
+
+Create 2 usergroup in zabbix: Network, Sysadmin
+
+get base DN for this user
+Get-ADUser svc_zabbix_ldap | Select DistinguishedName
+
+DistinguishedName
+-----------------
+CN=Zabbix LDAP Login,OU=ZbxServiceAccount,DC=company,DC=com
+
+
+if we use `sAMAccountName` we only need to insert username in login form not user@company.com, we do not need doman.
+
+
+add LDAP setting in zabbix
+![alt text](img/61.png)
+
+
+
+filter in wireshark
+(ip.src == 192.168.85.140 ) && (ip.dst == 192.168.85.130)
+
+`do not change defualt authentication to ldap`
+
+keep it on internal
+![alt text](img/62.png)
+
+
+We chnage to LDAP for each user group
+
+now create usergroup in zabbix: Network, Sysadmin
+
+![alt text](img/63.png)
+![alt text](img/64.png)
+
+now you can login .
+
+
+
+# zabbix ldap with JIT
+
+company.com
+│
+├── OU=Service Accounts
+│   └── CN=svc_zabbix_ldap
+│
+├── OU=Zabbix Groups
+│   ├── CN=GG-ZBX-Admins
+│   ├── CN=GG-ZBX-Operators
+│   └── CN=GG-ZBX-ReadOnly
+│
+└── OU=Users
+    ├── CN=ali
+    ├── CN=reza
+    └── CN=sara
+
+
+Create 3 below OU
+	Service Accounts
+	Zabbix Groups
+	Users
+
+![alt text](img/50.png)
+
+![alt text](img/51.png)
+
+go to the `Zabbix Groups` OU and create three below group
+
+![alt text](img/52.png)
+![alt text](img/53.png)
+![alt text](img/54.png)
+
+![alt text](img/55.png)
+![alt text](img/56.png)
+
+for Bind DN use distingush name of service account user, in our example we can get distingush name by
+```sh
+Get-ADUser -Identity svc_zabbix_ldap -Properties DistinguishedName | Select-Object DistinguishedName
+```
+
+![alt text](img/57.png)
+
+
+```sh
+
+ldapsearch -x   -H ldap://dc.company.com:389   -D 'CN=Zabbix LDAP,OU=Service Accounts,DC=company,DC=com'   -W   -b 'DC=company,DC=com'
+
+
+```
