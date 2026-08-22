@@ -149,7 +149,9 @@ echo "deb https://packagecloud.io/timescale/timescaledb/ubuntu/ $(lsb_release -c
 
 wget --quiet -O - https://packagecloud.io/timescale/timescaledb/gpgkey | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/timescaledb.gpg
 
+chmod 644 /etc/apt/trusted.gpg.d/timescaledb.gpg
 sudo apt update
+
 
 
 

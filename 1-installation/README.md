@@ -26,7 +26,7 @@ sudo -u zabbix ls -lah
 
 
 
-# security
+# php and nginx tunning and  security
 ```sh
 
 # hide nginx version
@@ -47,6 +47,23 @@ expose_php = Off
 systemctl restart php-fpm
 
 
+vim /etc/php/*/fpm/conf.d/10-opcache.ini
+-----
+opcache.enable=1
+
+opcache.memory_consumption=512
+
+opcache.interned_strings_buffer=16
+
+opcache.max_accelerated_files=20000
+
+opcache.revalidate_freq=60
+
+opcache.validate_timestamps=1
+
+opcache.save_comments=1
+
+-----
 
 
 ```
@@ -430,6 +447,10 @@ now create discovery action
 
 ![ext16](img/ext16.png)
 
+# Zabbix Tunning
+
+**Do not increase every Zabbix worker process blindly. Identify the bottleneck first, tune the affected subsystem, and then measure the result.**
+
 
 ## zbx-proxy-configuration and tunning
 ```sh
@@ -452,7 +473,34 @@ ProxyMemoryBufferSize=2G
 ProxyConfigFrequency=10
 DataSenderFrequency=1
 
-CacheSize=512M
+CacheSize=1G
+StartAgentPollers=3
+------
+
+ps -ef | grep '[z]abbix_proxy: agent poller'
+```
+Example output:
+
+``` text
+agent poller #1
+agent poller #2
+agent poller #3
+```
+```sh
+
+# If the Zabbix Proxy Health template reports:
+# Utilization of ICMP pinger processes over 75%
+StartPingers=3
+
+# ps -ef | grep '[z]abbix_proxy: icmp pinger'
+
+
+StartSNMPPollers=3
+StartHTTPAgentPollers=4
+StartPollersUnreachable=5
+StartPreprocessors=4
+# MaxConcurrentChecksPerPoller= # use default value
+Timeout=4
 
 
 ```
@@ -491,6 +539,7 @@ CacheSize=512M
 ![alt text](img/ext17.png)
 
 
+## Zabbix 
 
 
 
