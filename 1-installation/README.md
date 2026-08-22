@@ -1223,52 +1223,32 @@ now create usergroup in zabbix: Network, Sysadmin
 ![alt text](img/63.png)
 ![alt text](img/64.png)
 
-now you can login .
+now you can login.
 
 
 
 # zabbix ldap with JIT
 
 company.com
-│
-├── OU=Service Accounts
-│   └── CN=svc_zabbix_ldap
-│
-├── OU=Zabbix Groups
-│   ├── CN=GG-ZBX-Admins
-│   ├── CN=GG-ZBX-Operators
-│   └── CN=GG-ZBX-ReadOnly
-│
-└── OU=Users
-    ├── CN=ali
-    ├── CN=reza
-    └── CN=sara
+zbx: user-group: 
+1. Application
+2. Network
+3. Sysadmins
+4. Database
+
+AD: groups
+1. ZBX-Application
+2. ZBX-Network
+3. ZBX-Sysadmins
+4. ZBX-Database
 
 
-Create 3 below OU
-	Service Accounts
-	Zabbix Groups
-	Users
-
-![alt text](img/50.png)
-
-![alt text](img/51.png)
-
-go to the `Zabbix Groups` OU and create three below group
-
-![alt text](img/52.png)
-![alt text](img/53.png)
-![alt text](img/54.png)
-
-![alt text](img/55.png)
-![alt text](img/56.png)
 
 for Bind DN use distingush name of service account user, in our example we can get distingush name by
 ```sh
 Get-ADUser -Identity svc_zabbix_ldap -Properties DistinguishedName | Select-Object DistinguishedName
 ```
 
-![alt text](img/57.png)
 
 
 ```sh
