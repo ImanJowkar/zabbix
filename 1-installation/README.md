@@ -1191,8 +1191,11 @@ name: svc_zabbix_ldap
 
 Create 2 usergroup in zabbix: Network, Sysadmin
 
+
 get base DN for this user
+```sh
 Get-ADUser svc_zabbix_ldap | Select DistinguishedName
+```
 
 DistinguishedName
 -----------------
@@ -1242,6 +1245,78 @@ AD: groups
 3. ZBX-Sysadmins
 4. ZBX-Database
 
+
+Create new OU, called ZbxServiceAccount
+
+![alt text](img/58.png)
+Create new user in this OU
+
+name: svc_zabbix_ldap
+![alt text](img/59.png)
+
+![alt text](img/60.png)
+
+create `OU` in `company.com`
+![alt text](img/65.png)
+
+create 4 group in this `OU` 
+AD: groups
+1. ZBX-Application
+2. ZBX-Network
+3. ZBX-Sysadmins
+4. ZBX-Database
+
+Group type  = Security
+Group scope = Global
+
+Get DN for Each Group
+
+```sh
+
+Get-ADGroup ZBX-Application | Select DistinguishedName
+Get-ADGroup ZBX-Network | Select DistinguishedName
+Get-ADGroup ZBX-Sysadmins | Select DistinguishedName
+Get-ADGroup ZBX-Database | Select DistinguishedName
+```
+
+
+create usergroup in zabbix too.
+![alt text](img/68.png)
+
+and other group.
+notice that you have to create one more usergroup like below(`must disable`)
+
+![alt text](img/69.png)
+
+
+# config authentication
+
+![alt text](img/1002.png)
+
+![alt text](img/66.png)
+
+![alt text](img/67.png)
+![alt text](img/70.png)
+
+now create 4 group mapping
+![alt text](img/71.png)
+
+![alt text](img/72.png)
+
+![alt text](img/73.png)
+
+![alt text](img/74.png)
+
+
+the final config should like this
+![alt text](img/75.png)
+
+
+in search filter
+```sh
+(&(objectCategory=person)(objectClass=user)(%{attr}=%{user})(!(userAccountControl:1.2.840.113556.1.4.803:=2)))
+
+```
 
 
 for Bind DN use distingush name of service account user, in our example we can get distingush name by
