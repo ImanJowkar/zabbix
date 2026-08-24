@@ -1,0 +1,162 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: grafana-postgres
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: grafana
+      POSTGRES_USER: grafana
+      POSTGRES_PASSWORD: "ChangeThis_PostgresPassword_2026!"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    networks:
+      - grafana_backend
+    command:
+      - postgres
+      - -c
+      - max_connections=1000
+      - -c
+      - shared_buffers=256MB
+      - -c
+      - max_wal_size=2GB
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U grafana -d grafana"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+    pids_limit: 1000
+
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "20m"
+        max-file: "5"
+
+
+  grafana:
+    image: grafana/grafana:13.1.3
+    container_name: grafana
+    restart: unless-stopped
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    environment:
+      GF_SERVER_DOMAIN: grafana.linuxdevops.ir
+      GF_SERVER_ROOT_URL: https://grafana.linuxdevops.ir
+      GF_SERVER_PROTOCOL: http
+      GF_SERVER_ENFORCE_DOMAIN: "true"
+
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: "ChangeThis_GrafanaAdminPassword_2026!"
+      GF_SECURITY_SECRET_KEY: "ChangeThisToALongRandomSecretKey_AtLeast32Chars"
+
+      GF_DATABASE_TYPE: postgres
+      GF_DATABASE_HOST: postgres:5432
+      GF_DATABASE_NAME: grafana
+      GF_DATABASE_USER: grafana
+      GF_DATABASE_PASSWORD: "ChangeThis_PostgresPassword_2026!"
+      GF_DATABASE_SSL_MODE: disable
+
+      GF_SECURITY_COOKIE_SECURE: "true"
+      GF_SECURITY_COOKIE_SAMESITE: strict
+      GF_SECURITY_DISABLE_GRAVATAR: "true"
+
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+      GF_USERS_ALLOW_SIGN_UP: "false"
+
+      GF_LOG_MODE: console
+      GF_LOG_LEVEL: info
+
+    volumes:
+      - grafana_data:/var/lib/grafana
+
+    networks:
+      - grafana_backend
+
+    read_only: true
+
+    tmpfs:
+      - /tmp:size=64M,mode=1777
+
+    cap_drop:
+      - ALL
+
+    security_opt:
+      - no-new-privileges:true
+
+    pids_limit: 300
+
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "20m"
+        max-file: "5"
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget --quiet --tries=1 --spider http://localhost:3000/api/health || exit 1"
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+
+  nginx:
+    image: nginx:1.29-alpine
+    container_name: grafana-nginx
+    restart: unless-stopped
+
+    depends_on:
+      grafana:
+        condition: service_healthy
+
+    ports:
+      - "80:80"
+      - "443:443"
+
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./certs:/etc/nginx/certs:ro
+
+    networks:
+      - grafana_backend
+
+    pids_limit: 200
+
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "20m"
+        max-file: "5"
+
+
+volumes:
+  grafana_data:
+    name: grafana_data
+
+  postgres_data:
+    name: grafana_postgres_data
+
+
+networks:
+  grafana_backend:
+    name: grafana_backend
+    driver: bridge

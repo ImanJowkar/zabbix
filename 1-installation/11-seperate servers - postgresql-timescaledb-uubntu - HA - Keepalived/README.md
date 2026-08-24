@@ -385,7 +385,7 @@ ufw reload
 # delete pgsql zbx database
 
 ```sh
-
+################# zabbix server database
 su - postgres
 psql zabbix
 
@@ -410,6 +410,15 @@ dropdb zabbix
 
 psql -c '\l'
 psql -c '\du'
+
+##################### zabbix proxy database
+
+psql -c '\l'
+psql -c '\du'
+
+
+sudo -u postgres dropdb --if-exists zabbix_proxy
+sudo -u postgres dropuser --if-exists zabbix
 
 
 
