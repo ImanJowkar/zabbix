@@ -68,24 +68,54 @@ opcache.save_comments=1
 
 ```
 
+
 # inspect zabbix db
+Host → Item → History → Trigger → Event → Problem
 
 ```sh
 
 su - postgres
 psql
-\l 
-\c zabbix;
-\dt
+\l          # show all databases
+\c zabbix;  # connect to zabbix database
+\dt         # show all tables in current database
 
-\dt history*
-\dt trends*
+\dt history*    # show all table name starts with history
+```
+zabbix=# \dt history*
+             List of tables
+ Schema |     Name     | Type  | Owner
+--------+--------------+-------+--------
+ public | history      | table | zabbix
+ public | history_bin  | table | zabbix
+ public | history_log  | table | zabbix
+ public | history_str  | table | zabbix
+ public | history_text | table | zabbix
+ public | history_uint | table | zabbix
+(6 rows)
+
+
+```sh
+\dt trends*     # show all table name starts with trends
+```
+zabbix=# \dt trends*
+            List of tables
+ Schema |    Name     | Type  | Owner
+--------+-------------+-------+--------
+ public | trends      | table | zabbix
+ public | trends_uint | table | zabbix
+(2 rows)
+
+```sh
 
 select hypertable_schema, hypertable_name FROM timescaledb_information.hypertables;
 
 
 
 select * from history limit 10;
+
+
+SELECT pg_size_pretty(pg_database_size('zabbix')); # get zabbix database size
 
 ```
 
