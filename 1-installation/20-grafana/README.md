@@ -35,6 +35,13 @@ docker compose exec grafana grafana-cli admin reset-admin-password 'NewStrongPas
 
 ```
 
+## Get wild-card certificate
+```sh
+sudo certbot certonly --manual --preferred-challenges dns -d "*.mydomain.com" -d mydomain.com
+
+
+
+```
 
 
 # Grafana with pgsql
@@ -54,6 +61,7 @@ select * from data_source;
 cp /home/iman/alexanderzobnin-zabbix-app-6.6.0.linux-amd64.zip /var/lib/docker/volumes/grafana_data/_data/plugins/
 docker compose -f docker-compose-pgsql.yaml exec -ti grafana bash
 cd /var/lib/grafana/plugins
+unzip alexanderzobnin-zabbix-app-6.6.0.linux-amd64.zip
 
 exit
 

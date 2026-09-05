@@ -210,13 +210,23 @@ HANodeName=zbx-srv1
 NodeAddress=192.168.85.151:10051
 ----
 
+
+useradd \
+    --system \
+    --no-create-home \
+    --shell /usr/sbin/nologin \
+    keepalived_script
+
+
+
+
 vim /etc/keepalived/keepalived.conf
 ----
 global_defs {
     router_id ZBX_SRV1
 
     enable_script_security
-    script_user root
+    script_user keepalived_script
 
     vrrp_garp_master_delay 1
     vrrp_garp_master_repeat 5
@@ -224,17 +234,17 @@ global_defs {
     vrrp_garp_master_refresh_repeat 2
 }
 
-vrrp_script chk_nginx {
+vrrp_script chk_zabbix_web {
     script "/etc/keepalived/check_nginx.sh"
+
     interval 2
     timeout 2
     fall 3
     rise 2
-    weight -60
 }
 
 vrrp_instance ZBX_WEB {
-    state MASTER
+    state BACKUP
 
     interface ens33
 
@@ -243,9 +253,13 @@ vrrp_instance ZBX_WEB {
     advert_int 1
 
     unicast_src_ip 192.168.85.151
+    unicast_ttl 255
+
+    check_unicast_src
+    unicast_fault_no_peer
 
     unicast_peer {
-        192.168.85.152
+        192.168.85.152 min_ttl 255 max_ttl 255
     }
 
     virtual_ipaddress {
@@ -253,10 +267,9 @@ vrrp_instance ZBX_WEB {
     }
 
     track_script {
-        chk_nginx
+        chk_zabbix_web
     }
 }
-
 ----
 
 
@@ -272,8 +285,12 @@ exit $?
 EOF
 
 
-chmod 700 /etc/keepalived/check_nginx.sh
-chown root:root /etc/keepalived/check_nginx.sh
+chown root:keepalived_script /etc/keepalived/check_nginx.sh
+chmod 750 /etc/keepalived/check_nginx.sh
+
+
+sudo -u keepalived_script /etc/keepalived/check_nginx.sh
+echo $?
 
 
 
@@ -301,13 +318,24 @@ NodeAddress=192.168.85.152:10051
 ----
 
 
+useradd \
+    --system \
+    --no-create-home \
+    --shell /usr/sbin/nologin \
+    keepalived_script
+
+
+
+
+
 vim /etc/keepalived/keepalived.conf
 ----
+
 global_defs {
     router_id ZBX_SRV2
 
     enable_script_security
-    script_user root
+    script_user keepalived_script
 
     vrrp_garp_master_delay 1
     vrrp_garp_master_repeat 5
@@ -315,13 +343,13 @@ global_defs {
     vrrp_garp_master_refresh_repeat 2
 }
 
-vrrp_script chk_nginx {
-    script "/etc/keepalived/check_nginx.sh"
+vrrp_script chk_zabbix_web {
+    script "/etc/keepalived/check_zabbix_web.sh"
+
     interval 2
     timeout 2
     fall 3
     rise 2
-    weight -60
 }
 
 vrrp_instance ZBX_WEB {
@@ -334,9 +362,13 @@ vrrp_instance ZBX_WEB {
     advert_int 1
 
     unicast_src_ip 192.168.85.152
+    unicast_ttl 255
+
+    check_unicast_src
+    unicast_fault_no_peer
 
     unicast_peer {
-        192.168.85.151
+        192.168.85.151 min_ttl 255 max_ttl 255
     }
 
     virtual_ipaddress {
@@ -344,11 +376,12 @@ vrrp_instance ZBX_WEB {
     }
 
     track_script {
-        chk_nginx
+        chk_zabbix_web
     }
 }
-
 ----
+
+
 
 
 
@@ -364,9 +397,14 @@ exit $?
 EOF
 
 
-chmod 700 /etc/keepalived/check_nginx.sh
-chown root:root /etc/keepalived/check_nginx.sh
 
+
+
+chown root:keepalived_script /etc/keepalived/check_nginx.sh
+chmod 750 /etc/keepalived/check_nginx.sh
+
+sudo -u keepalived_script /etc/keepalived/check_nginx.sh
+echo $?
 
 
 vim /etc/ufw/before.rules

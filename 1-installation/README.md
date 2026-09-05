@@ -1420,3 +1420,23 @@ ldapsearch -x   -H ldap://dc.company.com:389   -D 'CN=Zabbix LDAP,OU=Service Acc
 
 
 ```
+
+
+# Keycloak
+
+```sh
+
+docker pull hub.hamdocker.ir/keycloak/keycloak:26.7.3
+
+docker run -d \
+  --name keycloak \
+  -p 8080:8080 \
+  -e KC_BOOTSTRAP_ADMIN_USERNAME=admin \
+  -e KC_BOOTSTRAP_ADMIN_PASSWORD=Admin123! \
+  hub.hamdocker.ir/keycloak/keycloak:26.7.3 \
+  start-dev
+
+
+
+
+```
