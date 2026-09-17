@@ -1033,7 +1033,30 @@ cat /usr/share/zabbix-sql-scripts/postgresql/timescaledb/schema.sql | \
     -U zabbix \
     -d zabbix \
     -W
+
+
+
+# see the traffic is cleartext
+
+sudo systemctl stop php8.3-fpm.service
+sudo systemctl stop nginx.service
+sudo systemctl status zabbix-server.service
+
+
+# wireshark filter
+ip.addr == 192.168.85.150 && tcp.port == 5000
+
+
+# capture with tcpdump
+tcpdump -i any -s 0 -w /tmp/zabbix-postgres.pcap 'host 192.168.85.150 and tcp port 5000'
+
+# send specific qurey from zabbix server
+psql -h 192.168.85.95 -p 5000 -U zabbix -d zabbix
+SELECT 'WIRESHARK_CLEAR_TEXT_TEST_12345';
+
 ```
+
+
 
 ---
 

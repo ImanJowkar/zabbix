@@ -252,8 +252,7 @@ Install runtime certificate files:
 ```bash
 mkdir -p /etc/etcd/cert
 
-cp ca_cert.pem cert.cnf etcd_cert.csr etcd_cert.pem etcd_key.pem \
-  /etc/etcd/cert/
+cp ca_cert.pem cert.cnf etcd_cert.csr etcd_cert.pem etcd_key.pem /etc/etcd/cert/
 
 chown -R etcd:etcd /etc/etcd
 chmod 0750 /etc/etcd /etc/etcd/cert
@@ -264,11 +263,9 @@ chmod 0644 /etc/etcd/cert/ca_cert.pem /etc/etcd/cert/etcd_cert.pem
 Copy runtime certs to the other nodes:
 
 ```bash
-scp /etc/etcd/cert/{ca_cert.pem,etcd_cert.pem,etcd_key.pem} \
-  root@192.168.85.92:/etc/etcd/cert/
+scp /etc/etcd/cert/{ca_cert.pem,etcd_cert.pem,etcd_key.pem} root@192.168.85.92:/etc/etcd/cert/
 
-scp /etc/etcd/cert/{ca_cert.pem,etcd_cert.pem,etcd_key.pem} \
-  root@192.168.85.93:/etc/etcd/cert/
+scp /etc/etcd/cert/{ca_cert.pem,etcd_cert.pem,etcd_key.pem} root@192.168.85.93:/etc/etcd/cert/
 ```
 
 > Keep `ca_key.pem` private. The shared etcd certificate is acceptable for this lab; use per-node certificates in production.
@@ -393,12 +390,23 @@ etcdctlp member list -w table
 
 Important `endpoint status` columns:
 
-- `IS LEADER` - exactly one etcd leader
-- `ERRORS` - should be empty
-- `RAFT TERM` - normally equal across members
-- `RAFT INDEX` - equal or very close
-- `RAFT APPLIED INDEX` - should track `RAFT INDEX`
-- `IS LEARNER` - normal voting members should be `false`
+* `IS LEADER` - exactly one etcd leader
+  Indicates which member is currently the Raft leader. At any given time, only one member should be the leader.
+
+* `ERRORS` - should be empty
+  Shows any health or communication errors for the member. In a healthy cluster, this field should normally be empty.
+
+* `RAFT TERM` - normally equal across members
+  Represents the current Raft election term. It increases whenever a new leader election occurs and should normally be the same across members.
+
+* `RAFT INDEX` - equal or very close
+  Shows the latest Raft log index known by the member. Values across members should be equal or very close.
+
+* `RAFT APPLIED INDEX` - should track `RAFT INDEX`
+  Shows how many Raft log entries have actually been applied to the member's local state. It should stay close to `RAFT INDEX`.
+
+* `IS LEARNER` - normal voting members should be `false`
+  Indicates whether the member is a non-voting learner. Regular voting members in the etcd cluster should normally have this set to `false`.
 
 > The etcd leader and PostgreSQL/Patroni leader are independent.
 

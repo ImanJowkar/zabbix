@@ -171,6 +171,8 @@ apt install timescaledb-2-postgresql-18='2.28.3~ubuntu24.04-1804' timescaledb-2-
  
 
 
+
+sudo timescaledb-tune --pg-config=/usr/pgsql-18/bin/pg_config --dry-run
 timescaledb-tune --quiet --yes
 
 
