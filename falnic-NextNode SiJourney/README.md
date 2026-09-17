@@ -161,3 +161,12 @@ UserParameter=ssl.certificate.days[*],/opt/zabbix/venv/bin/python /opt/zabbix/ch
 ```
 
 ![4](img/4.png)
+
+
+# ding-ding
+
+```sh
+
+
+
+```
