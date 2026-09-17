@@ -275,7 +275,7 @@ systemctl restart haproxy
 
 systemctl show haproxy -p Restart -p RestartUSec -p Type
 
-vim /etc/haproxy/haproxy.conf
+vim /etc/haproxy/haproxy.cfg
 -----
 global
     maxconn 100
