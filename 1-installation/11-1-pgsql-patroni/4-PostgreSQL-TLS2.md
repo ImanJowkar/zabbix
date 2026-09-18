@@ -539,7 +539,7 @@ scp /root/postgresql-tls/postgres_ca.crt \
 ```bash
 ssh root@192.168.85.147 \
   'chown root:zabbix /etc/zabbix/postgresql-ca.crt && \
-   chmod 0640 /etc/zabbix/postgresql-ca.crt'
+   chmod 0644 /etc/zabbix/postgresql-ca.crt'
 ```
 
 Verify the file:
