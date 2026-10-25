@@ -1243,6 +1243,81 @@ zabbix_get -s 127.0.0.1 -k 'demo.xlsx[web-02,memory_usage]'
 ```
 
 
+# most used triggers
+```sh
+
+last(/HOST/net.if.status[ifOperStatus.INDEX])=2
+and
+count(/HOST/net.if.status[ifOperStatus.INDEX],#5,"eq",2)>=2
+
+
+
+count(/HOST/net.if.status[ifOperStatus.INDEX],#5,"eq",2)=3
+count(/chat.sazehsazan.com/web.test.fail[open chat.sazehsazan.com],#5,"ge",1)>=3
+
+min(/chat.sazehsazan.com/web.test.fail[open chat.sazehsazan.com],#3)>=1
+
+
+min(/HOST/ITEM,#3)>=1
+count(/HOST/ITEM,#5,"ge",1)>=3
+
+min(/HOST/ITEM,5m)>90  # cpu over 90% in 5 min
+avg(/HOST/ITEM,5m)>80  # mean of cpu more that 80 in 5 min
+
+
+```
+
+![alt text](img/80.png)
+
+![alt text](img/81.png)
+
+![alt text](img/82.png)
+
+![alt text](img/83.png)
+
+![alt text](img/84.png)
+
+![alt text](img/85.png)
+
+![alt text](img/86.png)
+
+![alt text](img/87.png)
+
+![alt text](img/88.png)
+
+![alt text](img/89.png)
+
+![alt text](img/90.png)
+
+
+
+
+## zabbix sender
+
+```sh
+zabbix_sender -z 192.168.1.50 -s "MyLinuxServer" -k custom.metric -o 123
+
+
+
+```
+
+
+
+
+# Find Process Name by Port
+```sh
+ss -ntlp | grep 8080
+# file pid
+lsof -i :8080 
+
+systemctl status $pid
+
+systemctl cat service-port.service
+
+ps -auxf | grep python
+```
+
+
 # interval in zabbix
 ```sh
 min interval: 1s
@@ -1440,3 +1515,4 @@ docker run -d \
 
 
 ```
+

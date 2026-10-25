@@ -5,18 +5,18 @@ services:
     restart: unless-stopped
 
     environment:
-      GF_SERVER_DOMAIN: grafana.linuxdevops.ir
-      GF_SERVER_ROOT_URL: https://grafana.linuxdevops.ir
-      GF_SERVER_PROTOCOL: http
-      GF_SERVER_ENFORCE_DOMAIN: "true"
+      # GF_SERVER_DOMAIN: grafana.linuxdevops.ir
+      # GF_SERVER_ROOT_URL: https://grafana.linuxdevops.ir
+      # GF_SERVER_PROTOCOL: http
+      # GF_SERVER_ENFORCE_DOMAIN: "true"
 
       GF_SECURITY_ADMIN_USER: admin
       GF_SECURITY_ADMIN_PASSWORD: "YourStrere"
       GF_SECURITY_SECRET_KEY: "FFSSDADFASDFASDF"
 
-      GF_SECURITY_COOKIE_SECURE: "true"
-      GF_SECURITY_COOKIE_SAMESITE: strict
-      GF_SECURITY_DISABLE_GRAVATAR: "true"
+      # GF_SECURITY_COOKIE_SECURE: "true"
+      # GF_SECURITY_COOKIE_SAMESITE: strict
+      # GF_SECURITY_DISABLE_GRAVATAR: "true"
 
       GF_AUTH_ANONYMOUS_ENABLED: "false"
       GF_USERS_ALLOW_SIGN_UP: "false"
