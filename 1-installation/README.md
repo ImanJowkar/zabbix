@@ -1253,9 +1253,9 @@ count(/HOST/net.if.status[ifOperStatus.INDEX],#5,"eq",2)>=2
 
 
 count(/HOST/net.if.status[ifOperStatus.INDEX],#5,"eq",2)=3
-count(/chat.sazehsazan.com/web.test.fail[open chat.sazehsazan.com],#5,"ge",1)>=3
+count(/chat.x.com/web.test.fail[open chat.x.com],#5,"ge",1)>=3
 
-min(/chat.sazehsazan.com/web.test.fail[open chat.sazehsazan.com],#3)>=1
+min(/chat.x.com/web.test.fail[open chat.x.com],#3)>=1
 
 
 min(/HOST/ITEM,#3)>=1
