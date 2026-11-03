@@ -1497,6 +1497,34 @@ ldapsearch -x   -H ldap://dc.company.com:389   -D 'CN=Zabbix LDAP,OU=Service Acc
 ```
 
 
+
+# show macro in database
+```sh
+
+SELECT
+    macro,
+    value,
+    type
+FROM globalmacro
+WHERE macro = '{$SNMP_COMMUNITY}';
+
+
+
+SELECT
+    macro,
+    value,
+    type
+FROM globalmacro
+WHERE macro = '{$MELI.PAYAMAK.API.KEY}';
+
+
+
+
+```
+
+
+
+
 # Keycloak
 
 ```sh

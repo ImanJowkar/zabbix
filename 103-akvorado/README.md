@@ -79,7 +79,11 @@ services:
       - "traefik.http.middlewares.console-password.basicauth.usersfile=/etc/traefik/users.htpasswd"
       - "traefik.http.routers.akvorado-console.middlewares=console-password,console-auth"
 ----
+```
+![alt text](img/8.png)
 
+
+```sh
 
 cd /opt/akvorado/docker
 
@@ -274,6 +278,29 @@ WHERE database NOT IN ('system', 'INFORMATION_SCHEMA', 'information_schema')
 FORMAT Vertical"
 
 
+# daily disk usage
+docker compose exec clickhouse clickhouse-client -q "
+SELECT
+    partition,
+    formatReadableSize(sum(bytes_on_disk)) AS size,
+    sum(rows) AS rows
+FROM system.parts
+WHERE database = 'default'
+  AND table = 'flows'
+  AND active
+GROUP BY partition
+ORDER BY partition DESC
+"
+
+# get clieckhose disk usage
+docker compose exec clickhouse clickhouse-client -q "
+SELECT formatReadableSize(sum(bytes_on_disk))
+FROM system.parts
+WHERE database = 'default'
+AND table = 'flows'
+AND active
+"
+
 
 cd /opt/akvorado
 vim  config/akvorado.yaml
@@ -282,16 +309,16 @@ clickhouse:
   orchestrator-url: http://akvorado-orchestrator:8080
   prometheus-endpoint: /metrics
 
+
   resolutions:
     - interval: 0
-      ttl: 24h
+      ttl: 72h # 3d
     - interval: 1m
-      ttl: 48h
+      ttl: 168h # 7d
     - interval: 5m
-      ttl: 168h
+      ttl: 2160h # 90d
     - interval: 1h
-      ttl: 720h
-
+      ttl: 8760h # 365d
 ----
 
 # default before change
@@ -335,8 +362,12 @@ FORMAT Vertical"
 
 ![alt text](img/4.png)
 
+# kafka tunning
 ```sh
 # retention.ms: 86400000 # 1 day
+# segment.bytes: 268435456
+# retention.ms: 21600000
+
 cd /opt/akvorado
 vim  config/akvorado.yaml
 ----
@@ -350,8 +381,8 @@ kafka:
     config-entries:
       # The retention policy in Kafka is mainly here to keep a buffer
       # for ClickHouse.
-      segment.bytes: 1073741824
-      retention.ms: 86400000 # 1 day
+      segment.bytes: 268435456 #256MB
+      retention.ms: 21600000 # 6 hours
       cleanup.policy: delete
       compression.type: producer
 ----
@@ -359,6 +390,20 @@ kafka:
 docker compose run --rm --no-deps   akvorado-orchestrator orchestrator   /etc/akvorado/akvorado.yaml --check
 docker compose restart akvorado-orchestrator
 
+
+
+docker compose exec kafka \
+  /opt/kafka/bin/kafka-topics.sh \
+  --bootstrap-server kafka:9092 --list
+
+docker compose exec kafka \
+  /opt/kafka/bin/kafka-configs.sh \
+  --bootstrap-server kafka:9092 \
+  --entity-type topics \
+  --entity-name flows \
+  --describe
+
+# look the dynamic parameter
 
 ```
 
@@ -626,6 +671,17 @@ set name=R-mik
 
 
 install Sankey plugin
+
+grafana-cli plugins install netsage-sankey-panel
+
+
+# or download the plugin using  wget 
+cp netsage-sankey-panel-1.1.4.zip /var/lib/docker/volumes/grafana_data/_data/plugins/
+docker exec -ti grafana bash
+cd /var/lib/grafana/plugins/
+
+unzip netsage-sankey-panel-1.1.4.zip
+
 
 
 
