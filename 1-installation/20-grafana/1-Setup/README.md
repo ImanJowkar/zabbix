@@ -2,19 +2,12 @@
 
 ```sh
 
-openssl rand -base64 48   > secrets/grafana_admin_password
-chmod 600 secrets/grafana_admin_password
-
-openssl rand -hex 32 > secrets/grafana_secret_key
-chmod 600 secrets/grafana_secret_key
-
-
 openssl req -x509 -newkey rsa:4096 -sha256 -nodes \
   -keyout privkey.pem \
   -out fullchain.pem \
   -days 3650 \
-  -subj "/CN=192.168.1.100" \
-  -addext "subjectAltName=IP:192.168.1.100"
+  -subj "/CN=192.168.85.74" \
+  -addext "subjectAltName=IP:192.168.85.74"
 
 
 
