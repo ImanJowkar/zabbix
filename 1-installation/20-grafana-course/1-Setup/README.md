@@ -15,8 +15,9 @@ docker compose -f docker-compose-sqlite.yaml up -d
 
 
 
-
+# reset admin password
 docker compose exec grafana grafana cli admin reset-admin-password 'NewStrongPassword'
+
 docker compose exec grafana grafana-cli admin reset-admin-password 'NewStrongPassword'
 
 
@@ -53,10 +54,11 @@ docker compose -f docker-compose-pgsql.yaml up -d
 docker compose -f docker-compose-pgsql.yaml exec postgres psql -U grafana -d grafana
 select * from data_source;
 
-
+```
 
 # add plugin manually
 
+```sh
 cp /home/iman/alexanderzobnin-zabbix-app-6.6.0.linux-amd64.zip /var/lib/docker/volumes/grafana_data/_data/plugins/
 docker compose -f docker-compose-pgsql.yaml exec -ti grafana bash
 cd /var/lib/grafana/plugins
@@ -65,9 +67,6 @@ unzip alexanderzobnin-zabbix-app-6.6.0.linux-amd64.zip
 exit
 
 docker compose -f docker-compose-pgsql.yaml restart grafana
-
-
-
 
 
 ```
