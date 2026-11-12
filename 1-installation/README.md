@@ -1297,7 +1297,7 @@ avg(/HOST/ITEM,5m)>80  # mean of cpu more that 80 in 5 min
 ```sh
 zabbix_sender -z 192.168.1.50 -s "MyLinuxServer" -k custom.metric -o 123
 
-
+date -d @1267619929
 
 ```
 
@@ -1544,3 +1544,121 @@ docker run -d \
 
 ```
 
+
+# mcp
+```sh
+
+# install n8n first from linux repository 
+
+dnf install zabbix-mcp-server
+
+sudo vim /etc/zabbix/zabbix_mcp_server.conf
+-------
+FrontendURL=http://172.16.30.243/api_jsonrpc.php
+AllowedIP=127.0.0.1,172.16.30.0/24
+ListenPort=8443
+# TLSAccept=cert
+# TLSCertFile=/etc/zabbix/mcp/cert.pem
+# TLSKeyFile=/etc/zabbix/mcp/key.pem
+LogFile=/var/log/zabbix/zabbix_mcp_server.log
+-------
+
+
+sudo zabbix_mcp_server -T -c /etc/zabbix/zabbix_mcp_server.conf
+sudo systemctl enable --now zabbix-mcp-server
+sudo systemctl status zabbix-mcp-server
+sudo ss -tlnp | grep 8443
+
+
+curl -k http://172.16.30.243:8443/mcp \
+  -H "Authorization: Bearer 08b53089727bb65e83425c86895788b1bc749f8ffe3851039ab1b7414e9a14b6" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json, text/event-stream" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+
+
+date -d @1267619929
+
+
+date -d "2026-11-19 09:50:20" +%s
+
+
+zabbix_sender -z 172.16.30.243 -s "test-ek-30" -k custom.metric -o 123
+
+
+
+```
+
+
+# ClickHouse for storing history data
+```sh
+
+sudo docker run -d \
+  --name clickhouse \
+  -e CLICKHOUSE_DB=zabbix \
+  -e CLICKHOUSE_USER=zabbix \
+  -e CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT=1 \
+  -e CLICKHOUSE_PASSWORD=test \
+  -p 8123:8123/tcp \
+  -p 9000:9000/tcp \
+  --cap-add=SYS_NICE \
+  --cap-add=NET_ADMIN \
+  --cap-add=IPC_LOCK \
+  --ulimit nofile=262144:262144 \
+  -v clickhouse_data:/var/lib/clickhouse \
+  clickhouse/clickhouse-server:26.4
+
+
+
+sudo docker exec -it clickhouse \
+  clickhouse-client \
+  --query "SELECT version()"
+
+# 26.4.4.38
+
+
+./history_all.sh --user zabbix --password test  --db zabbix --server http://localhost:8123 --ttl 15552000
+
+
+
+# verify table
+sudo docker exec -it clickhouse \
+  clickhouse-client \
+  --user zabbix \
+  --password test \
+  --query "SHOW TABLES FROM zabbix"
+
+# history
+# history_json
+# history_log
+# history_str
+# history_text
+# history_uint
+
+vim /etc/zabbix/web/zabbix.conf.php
+-------------
+$HISTORY_PROVIDERS[] = [
+  'types' => ['uint','dbl','str','log','text','json'],
+  'provider' => 'clickhouse',
+  'url' => 'http://localhost:8123',
+  'db' => 'zabbix',
+  'username' => 'zabbix',
+  'password' => 'test'
+];
+------------
+
+
+# verfiy clickhouse recive data or not
+docker exec -ti clickhouse bash
+
+clickhouse-client \
+  --user zabbix \
+  --password 'test' \
+  --database zabbix
+
+
+SHOW TABLES;
+
+
+
+```

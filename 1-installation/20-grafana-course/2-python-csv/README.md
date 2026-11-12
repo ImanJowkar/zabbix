@@ -283,7 +283,29 @@ python app.py
 
 
 
-# Alerting
 use this query and use script **3-app-filter-data.py**
 
 http://192.168.85.74:8000/sales.csv?from=${__from}&to=${__to}
+
+
+### geo map
+```sh
+------
+city,lat,lon,sales
+Tehran,35.69,51.39,1200
+Mashhad,36.26,59.62,650
+Isfahan,32.65,51.67,540
+Shiraz,29.59,52.58,480
+Tabriz,38.08,46.29,420
+Ahvaz,31.32,48.67,300
+Kerman,30.28,57.08,210
+Rasht,37.28,49.58,260
+Bandar Abbas,27.18,56.27,180
+Kermanshah,34.31,47.07,230
+------
+
+```
+![alt text](img/26.png)
+![alt text](img/27.png)
+![alt text](img/28.png)
+
